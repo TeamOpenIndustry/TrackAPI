@@ -1,0 +1,16 @@
+[
+{
+  "modid": "trackapi",
+  "name": "Track API",
+  "description": "A common track interface for minecraft forge",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["cam72cam"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

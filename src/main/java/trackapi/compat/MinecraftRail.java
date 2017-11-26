@@ -6,8 +6,8 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import trackapi.lib.Gauges;
 import trackapi.lib.ITrackTile;
-import trackapi.lib.Util;
 
 public class MinecraftRail implements ITrackTile {
 
@@ -23,15 +23,7 @@ public class MinecraftRail implements ITrackTile {
 
 	@Override
 	public double getTrackGauge() {
-		return Util.MINECRAFT_GAUGE;
-	}
-
-	@Override
-	public double getTrackSlope() {
-		return	direction == EnumRailDirection.ASCENDING_EAST ||
-				direction == EnumRailDirection.ASCENDING_WEST ||
-				direction == EnumRailDirection.ASCENDING_NORTH ||
-				direction == EnumRailDirection.ASCENDING_SOUTH ? 1 : 0;
+		return Gauges.MINECRAFT;
 	}
 
 	@Override

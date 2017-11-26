@@ -7,8 +7,8 @@ public interface ITrackTile {
 	/**
 	 * The distance between the rails measured in meters
 	 * 
-	 * @see Util#STANDARD_GAUGE
-	 * @see Util#MINECRAFT_GAUGE
+	 * @see Gauges#STANDARD
+	 * @see Gauges#MINECRAFT
 	 */
 	public double getTrackGauge();
 	

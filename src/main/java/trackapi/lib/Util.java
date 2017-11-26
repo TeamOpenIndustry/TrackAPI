@@ -8,16 +8,6 @@ import net.minecraft.world.World;
 import trackapi.compat.MinecraftRail;
 
 public class Util {
-	/**
-	 * US Standard Gauge in meters
-	 */
-	public static final double STANDARD_GAUGE = 1.435;
-
-	/**
-	 * Minecraft Gauge in meters
-	 */
-	public static final double MINECRAFT_GAUGE = 0.632;
-	
 	private static ITrackTile getInternalTileEntity(World world, Vec3d pos, boolean acceptMinecraftRails) {
 		BlockPos bp = new BlockPos(MathHelper.floor(pos.x), MathHelper.floor(pos.y), MathHelper.floor(pos.z));
 		TileEntity te = world.getTileEntity(bp);

@@ -13,12 +13,6 @@ public interface ITrackTile {
 	public double getTrackGauge();
 	
 	/**
-	 * The slope of the track.  For example, going up 1 meter for every 100 meters in
-	 * length would equal 1/100 or 0.01
-	 */
-	public double getTrackSlope();
-	
-	/**
 	 * Used by rolling stock to look up their next position.
 	 * 
 	 * @param currentPosition - Current entity or bogey position

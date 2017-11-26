@@ -27,5 +27,5 @@ public interface ITrackTile {
 	 * @param distance - Distanced traveled in meters
 	 * @return The new position of the entity or bogey
 	 */
-	public Vec3d getNextPosition(Vec3d currentPosition, float rotationYaw, float bogeyYaw, double distance);
+	public Vec3d getNextPosition(Vec3d currentPosition, Vec3d motion);
 }

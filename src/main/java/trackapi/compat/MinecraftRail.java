@@ -12,8 +12,10 @@ import trackapi.lib.Util;
 public class MinecraftRail implements ITrackTile {
 
 	private EnumRailDirection direction;
+	private BlockPos pos;
 
 	public MinecraftRail(World world, BlockPos pos) {
+		this.pos = pos;
 		IBlockState state = world.getBlockState(pos);
         BlockRailBase blockrailbase = (BlockRailBase)state.getBlock();
         this.direction = blockrailbase.getRailDirection(world, pos, state, null);
@@ -33,13 +35,7 @@ public class MinecraftRail implements ITrackTile {
 	}
 
 	@Override
-	public Vec3d getNextPosition(Vec3d currentPosition, float rotationYaw, float bogeyYaw, double distance) {
-		if (distance < 0) {
-			distance = -distance;
-			rotationYaw = (rotationYaw + 180) % 360;
-			bogeyYaw = (bogeyYaw + 180) % 360;
-		}
-		
+	public Vec3d getNextPosition(Vec3d currentPosition, Vec3d motion) {
 		//TODO fill in the rest of the states
 		
 		switch (direction) {
@@ -52,14 +48,11 @@ public class MinecraftRail implements ITrackTile {
 		case ASCENDING_WEST:
 			break;
 		case EAST_WEST:
-			break;
+			return currentPosition.addVector(motion.x > 0 ? motion.lengthVector() : -motion.lengthVector(), 0, pos.getZ() - currentPosition.z + 0.5);
 		case NORTH_EAST:
 			break;
 		case NORTH_SOUTH:
-			if (rotationYaw / 180 == 0) {
-				return currentPosition.addVector(0, 0, distance);
-			}
-			return currentPosition.addVector(0, 0, -distance);
+			return currentPosition.addVector(pos.getX() - currentPosition.x + 0.5, 0, motion.z > 0 ? motion.lengthVector() : -motion.lengthVector());
 		case NORTH_WEST:
 			break;
 		case SOUTH_EAST:

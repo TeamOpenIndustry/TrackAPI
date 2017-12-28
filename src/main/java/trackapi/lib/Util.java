@@ -2,14 +2,13 @@ package trackapi.lib;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import trackapi.compat.MinecraftRail;
 
 public class Util {
 	private static ITrackTile getInternalTileEntity(World world, Vec3d pos, boolean acceptMinecraftRails) {
-		BlockPos bp = new BlockPos(MathHelper.floor(pos.x), MathHelper.floor(pos.y), MathHelper.floor(pos.z));
+		BlockPos bp = new BlockPos(Math.floor(pos.xCoord), Math.floor(pos.yCoord), Math.floor(pos.zCoord));
 		TileEntity te = world.getTileEntity(bp);
 		if (te instanceof ITrackTile) {
 			return (ITrackTile) te;

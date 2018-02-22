@@ -1,18 +1,36 @@
 package trackapi.lib;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import trackapi.compat.MinecraftRail;
 
 public class Util {
-	private static ITrackTile getInternalTileEntity(World world, Vec3d pos, boolean acceptMinecraftRails) {
-		BlockPos bp = new BlockPos(MathHelper.floor(pos.x), MathHelper.floor(pos.y), MathHelper.floor(pos.z));
+	private static ITrack getInternalTileEntity(final World world, Vec3d pos, boolean acceptMinecraftRails) {
+		final BlockPos bp = new BlockPos(Math.floor(pos.x), Math.floor(pos.y), Math.floor(pos.z));
+		IBlockState bs = world.getBlockState(bp);
+		
+		if (bs.getBlock() instanceof ITrackBlock) {
+			final ITrackBlock track = (ITrackBlock) bs.getBlock();
+			// Wrap block in ITrack
+			
+			return new ITrack() {
+				@Override
+				public double getTrackGauge() {
+					return track.getTrackGauge(world, bp);
+				}
+				@Override
+				public Vec3d getNextPosition(Vec3d currentPosition, Vec3d motion) {
+					return track.getNextPosition(world, currentPosition, motion);
+				}
+			};
+		}
+		
 		TileEntity te = world.getTileEntity(bp);
-		if (te instanceof ITrackTile) {
-			return (ITrackTile) te;
+		if (te instanceof ITrack) {
+			return (ITrack) te;
 		}
 		if (acceptMinecraftRails) {
 			if (MinecraftRail.isRail(world, bp)) {
@@ -22,8 +40,8 @@ public class Util {
 		return null;
 	}
 	
-	public static ITrackTile getTileEntity(World world, Vec3d pos, boolean acceptMinecraftRails) {
-		ITrackTile track = getInternalTileEntity(world, pos, acceptMinecraftRails);
+	public static ITrack getTileEntity(World world, Vec3d pos, boolean acceptMinecraftRails) {
+		ITrack track = getInternalTileEntity(world, pos, acceptMinecraftRails);
 		if (track != null) {
 			return track;
 		}

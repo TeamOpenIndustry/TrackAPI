@@ -7,9 +7,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import trackapi.lib.Gauges;
-import trackapi.lib.ITrackTile;
+import trackapi.lib.ITrack;
 
-public class MinecraftRail implements ITrackTile {
+public class MinecraftRail implements ITrack {
 
 	private EnumRailDirection direction;
 	private BlockPos pos;

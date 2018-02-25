@@ -23,7 +23,7 @@ public class Util {
 				}
 				@Override
 				public Vec3d getNextPosition(Vec3d currentPosition, Vec3d motion) {
-					return track.getNextPosition(world, currentPosition, motion);
+					return track.getNextPosition(world, bp, currentPosition, motion);
 				}
 			};
 		}

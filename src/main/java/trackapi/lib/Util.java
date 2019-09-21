@@ -1,46 +1,47 @@
 package trackapi.lib;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import trackapi.compat.MinecraftRail;
 
 public class Util {
-	private static ITrack getInternalTileEntity(final World world, Vec3d pos, boolean acceptMinecraftRails) {
-		final BlockPos bp = new BlockPos(Math.floor(pos.xCoord), Math.floor(pos.yCoord), Math.floor(pos.zCoord));
-		IBlockState bs = world.getBlockState(bp);
-		
-		if (bs.getBlock() instanceof ITrackBlock) {
-			final ITrackBlock track = (ITrackBlock) bs.getBlock();
+	private static ITrack getInternalTileEntity(final World world, Vec3 pos, boolean acceptMinecraftRails) {
+		int posX = (int) Math.floor(pos.xCoord);
+		int posY = (int) Math.floor(pos.yCoord);
+		int posZ = (int) Math.floor(pos.zCoord);
+
+		Block bs = world.getBlock(posX, posY, posZ);
+		if (bs instanceof ITrackBlock) {
+			final ITrackBlock track = (ITrackBlock) bs;
 			// Wrap block in ITrack
 			
 			return new ITrack() {
 				@Override
 				public double getTrackGauge() {
-					return track.getTrackGauge(world, bp);
+					return track.getTrackGauge(world, posX, posY, posZ);
 				}
 				@Override
-				public Vec3d getNextPosition(Vec3d currentPosition, Vec3d motion) {
-					return track.getNextPosition(world, bp, currentPosition, motion);
+				public Vec3 getNextPosition(Vec3 currentPosition, Vec3 motion) {
+					return track.getNextPosition(world, posX, posY, posZ, currentPosition, motion);
 				}
 			};
 		}
 		
-		TileEntity te = world.getTileEntity(bp);
+		TileEntity te = world.getTileEntity(posX, posY, posZ);
 		if (te instanceof ITrack) {
 			return (ITrack) te;
 		}
 		if (acceptMinecraftRails) {
-			if (MinecraftRail.isRail(world, bp)) {
-				return new MinecraftRail(world, bp);
+			if (MinecraftRail.isRail(world, posX, posY, posZ)) {
+				return new MinecraftRail(world, posX, posY, posZ);
 			}
 		}
 		return null;
 	}
 	
-	public static ITrack getTileEntity(World world, Vec3d pos, boolean acceptMinecraftRails) {
+	public static ITrack getTileEntity(World world, Vec3 pos, boolean acceptMinecraftRails) {
 		ITrack track = getInternalTileEntity(world, pos, acceptMinecraftRails);
 		if (track != null) {
 			return track;

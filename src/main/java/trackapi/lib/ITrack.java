@@ -1,6 +1,6 @@
 package trackapi.lib;
 
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.Vec3;
 
 public interface ITrack {
 	
@@ -16,10 +16,7 @@ public interface ITrack {
 	 * Used by rolling stock to look up their next position.
 	 * 
 	 * @param currentPosition - Current entity or bogey position
-	 * @param rotationYaw - Current entity rotation in degrees
-	 * @param bogieYaw - Current bogey rotation in degrees (set to rotationYaw if unused)
-	 * @param distance - Distanced traveled in meters
-	 * @return The new position of the entity or bogey
+	 * @param motion - Motion over the last tick (velocity)
 	 */
-	public Vec3d getNextPosition(Vec3d currentPosition, Vec3d motion);
+	public Vec3 getNextPosition(Vec3 currentPosition, Vec3 motion);
 }

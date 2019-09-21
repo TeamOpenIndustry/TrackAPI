@@ -1,7 +1,6 @@
 package trackapi.lib;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 /**
@@ -16,16 +15,14 @@ public interface ITrackBlock {
 	 * @see Gauges#STANDARD
 	 * @see Gauges#MINECRAFT
 	 */
-	public double getTrackGauge(World world, BlockPos pos);
+	public double getTrackGauge(World world, int posX, int posY, int posZ);
 	
 	/**
 	 * Used by rolling stock to look up their next position.
 	 * 
 	 * @param currentPosition - Current entity or bogey position
-	 * @param rotationYaw - Current entity rotation in degrees
-	 * @param bogieYaw - Current bogey rotation in degrees (set to rotationYaw if unused)
-	 * @param distance - Distanced traveled in meters
+	 * @param motion - Motion over the last tick (velocity)
 	 * @return The new position of the entity or bogey
 	 */
-	public Vec3d getNextPosition(World world, BlockPos pos, Vec3d currentPosition, Vec3d motion);
+	public Vec3 getNextPosition(World world, int posX, int posY, int posZ, Vec3 currentPosition, Vec3 motion);
 }

@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "trackapi",
+  "version": "${version}",
+
+  "name": "Track API",
+  "description": "A common track interface for minecraft",
+  "authors": [
+    "cam72cam"
+  ],
+  "contact": {
+  },
+
+  "license": "MIT",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "trackapi.TrackAPI"
+    ]
+  },
+  "mixins": [
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.4.0",
+    "fabric": "*"
+  },
+  "suggests": {
+    "flamingo": "*"
+  }
+}

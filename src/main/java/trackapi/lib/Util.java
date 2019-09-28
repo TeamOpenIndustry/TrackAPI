@@ -1,16 +1,16 @@
 package trackapi.lib;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import trackapi.compat.MinecraftRail;
 
 public class Util {
-	private static ITrack getInternalTileEntity(final World world, Vec3d pos, boolean acceptMinecraftRails) {
+	private static ITrack getInternalBlockEntity(final World world, Vec3d pos, boolean acceptMinecraftRails) {
 		final BlockPos bp = new BlockPos(Math.floor(pos.x), Math.floor(pos.y), Math.floor(pos.z));
-		IBlockState bs = world.getBlockState(bp);
+		BlockState bs = world.getBlockState(bp);
 		
 		if (bs.getBlock() instanceof ITrackBlock) {
 			final ITrackBlock track = (ITrackBlock) bs.getBlock();
@@ -28,7 +28,7 @@ public class Util {
 			};
 		}
 		
-		TileEntity te = world.getTileEntity(bp);
+		BlockEntity te = world.getBlockEntity(bp);
 		if (te instanceof ITrack) {
 			return (ITrack) te;
 		}
@@ -40,17 +40,17 @@ public class Util {
 		return null;
 	}
 	
-	public static ITrack getTileEntity(World world, Vec3d pos, boolean acceptMinecraftRails) {
-		ITrack track = getInternalTileEntity(world, pos, acceptMinecraftRails);
+	public static ITrack getBlockEntity(World world, Vec3d pos, boolean acceptMinecraftRails) {
+		ITrack track = getInternalBlockEntity(world, pos, acceptMinecraftRails);
 		if (track != null) {
 			return track;
 		}
 		// Allow a bit of vertical fuzziness
-		track = getInternalTileEntity(world, pos.addVector(0, 0.4, 0), acceptMinecraftRails);
+		track = getInternalBlockEntity(world, pos.add(0, 0.4, 0), acceptMinecraftRails);
 		if (track != null) {
 			return track;
 		}
-		track = getInternalTileEntity(world, pos.addVector(0, -0.4, 0), acceptMinecraftRails);
+		track = getInternalBlockEntity(world, pos.add(0, -0.4, 0), acceptMinecraftRails);
 		if (track != null) {
 			return track;
 		}

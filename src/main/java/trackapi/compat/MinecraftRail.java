@@ -1,8 +1,9 @@
 package trackapi.compat;
 
-import net.minecraft.block.BlockRailBase;
-import net.minecraft.block.BlockRailBase.EnumRailDirection;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.AbstractRailBlock;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.item.minecart.MinecartEntity;
+import net.minecraft.state.properties.RailShape;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -11,14 +12,14 @@ import trackapi.lib.ITrack;
 
 public class MinecraftRail implements ITrack {
 
-	private EnumRailDirection direction;
+	private RailShape direction;
 	private BlockPos pos;
 
 	public MinecraftRail(World world, BlockPos pos) {
 		this.pos = pos;
-		IBlockState state = world.getBlockState(pos);
-        BlockRailBase blockrailbase = (BlockRailBase)state.getBlock();
-        this.direction = blockrailbase.getRailDirection(world, pos, state, null);
+		BlockState state = world.getBlockState(pos);
+        AbstractRailBlock blockrailbase = (AbstractRailBlock)state.getBlock();
+        this.direction = blockrailbase.getRailDirection(state, world, pos, new MinecartEntity(world, pos.getX(), pos.getY(), pos.getZ()));
 	}
 
 	@Override
@@ -40,11 +41,11 @@ public class MinecraftRail implements ITrack {
 		case ASCENDING_WEST:
 			break;
 		case EAST_WEST:
-			return currentPosition.addVector(motion.x > 0 ? motion.lengthVector() : -motion.lengthVector(), 0, pos.getZ() - currentPosition.z + 0.5);
+			return currentPosition.add(motion.x > 0 ? motion.length() : -motion.length(), 0, pos.getZ() - currentPosition.z + 0.5);
 		case NORTH_EAST:
 			break;
 		case NORTH_SOUTH:
-			return currentPosition.addVector(pos.getX() - currentPosition.x + 0.5, 0, motion.z > 0 ? motion.lengthVector() : -motion.lengthVector());
+			return currentPosition.add(pos.getX() - currentPosition.x + 0.5, 0, motion.z > 0 ? motion.length() : -motion.length());
 		case NORTH_WEST:
 			break;
 		case SOUTH_EAST:
@@ -57,7 +58,7 @@ public class MinecraftRail implements ITrack {
 	}
 
 	public static boolean isRail(World world, BlockPos pos) {
-		return BlockRailBase.isRailBlock(world, pos);
+		return AbstractRailBlock.isRail(world, pos);
 	}
 	
 }

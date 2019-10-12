@@ -9,7 +9,42 @@ import net.minecraft.world.World;
 import trackapi.lib.Gauges;
 import trackapi.lib.ITrack;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class MinecraftRail implements ITrack {
+	private static Map<EnumRailDirection, Vec3d> vectors = new HashMap<>();
+	private static Map<EnumRailDirection, Vec3d> centers = new HashMap<>();
+	static {
+		Vec3d north = new Vec3d(0, 0, 1);
+		Vec3d south = new Vec3d(0, 0, -1);
+		Vec3d east = new Vec3d(1, 0, 0);
+		Vec3d west = new Vec3d(-1, 0, 0);
+		Vec3d ascending = new Vec3d(0, 1, 0);
+
+        vectors.put(EnumRailDirection.ASCENDING_EAST, east.add(ascending).normalize());
+        vectors.put(EnumRailDirection.ASCENDING_NORTH, north.add(ascending).normalize());
+        vectors.put(EnumRailDirection.ASCENDING_SOUTH, south.add(ascending).normalize());
+        vectors.put(EnumRailDirection.ASCENDING_WEST, west.add(ascending).normalize());
+        vectors.put(EnumRailDirection.EAST_WEST, east.normalize());
+        vectors.put(EnumRailDirection.NORTH_EAST, north.add(east).normalize());
+        vectors.put(EnumRailDirection.NORTH_SOUTH, north.normalize());
+        vectors.put(EnumRailDirection.NORTH_WEST, north.add(west).normalize());
+        vectors.put(EnumRailDirection.SOUTH_EAST, south.add(east).normalize());
+        vectors.put(EnumRailDirection.SOUTH_WEST, south.add(west).normalize());
+
+        centers.put(EnumRailDirection.ASCENDING_EAST, new Vec3d(0.5, 0.5, 0.5));
+        centers.put(EnumRailDirection.ASCENDING_NORTH, new Vec3d(0.5, 0.5, 0.5));
+        centers.put(EnumRailDirection.ASCENDING_SOUTH, new Vec3d(0.5, 0.5, 0.5));
+        centers.put(EnumRailDirection.ASCENDING_WEST, new Vec3d(0.5, 0.5, 0.5));
+        centers.put(EnumRailDirection.EAST_WEST, new Vec3d(0.5, 0.1, 0.5));
+        centers.put(EnumRailDirection.NORTH_EAST, new Vec3d(0.75, 0.1, 0.25));
+        centers.put(EnumRailDirection.NORTH_SOUTH, new Vec3d(0.5, 0.1, 0.5));
+        centers.put(EnumRailDirection.NORTH_WEST, new Vec3d(0.25, 0.1, 0.25));
+        centers.put(EnumRailDirection.SOUTH_EAST, new Vec3d(0.75, 0.1, 0.75));
+        centers.put(EnumRailDirection.SOUTH_WEST, new Vec3d(0.25, 0.1, 0.75));
+	}
+
 
 	private EnumRailDirection direction;
 	private BlockPos pos;
@@ -26,68 +61,10 @@ public class MinecraftRail implements ITrack {
 		return Gauges.MINECRAFT;
 	}
 
-	public Vec3d getTrackVector() {
-		Vec3d north = new Vec3d(0, 0, 1);
-		Vec3d south = new Vec3d(0, 0, -1);
-		Vec3d east = new Vec3d(1, 0, 0);
-		Vec3d west = new Vec3d(-1, 0, 0);
-		Vec3d ascending = new Vec3d(0, 1, 0);
-
-
-		switch (direction) {
-			case ASCENDING_EAST:
-				return east.add(ascending).normalize();
-			case ASCENDING_NORTH:
-				return north.add(ascending).normalize();
-			case ASCENDING_SOUTH:
-				return south.add(ascending).normalize();
-			case ASCENDING_WEST:
-				return west.add(ascending).normalize();
-			case EAST_WEST:
-				return east.normalize();
-			case NORTH_EAST:
-				return north.add(east).normalize();
-			case NORTH_SOUTH:
-				return north.normalize();
-			case NORTH_WEST:
-				return north.add(west).normalize();
-			case SOUTH_EAST:
-				return south.add(east).normalize();
-			case SOUTH_WEST:
-				return south.add(west).normalize();
-            default:
-				return null;
-		}
-	}
-
-	public Vec3d getTrackCenter() {
-		switch (direction) {
-			case ASCENDING_EAST:
-			case ASCENDING_NORTH:
-			case ASCENDING_SOUTH:
-			case ASCENDING_WEST:
-				return new Vec3d(0.5, 0.5, 0.5);
-			case EAST_WEST:
-				return new Vec3d(0.5, 0.1, 0.5);
-			case NORTH_EAST:
-				return new Vec3d(0.75, 0.1, 0.25);
-			case NORTH_SOUTH:
-				return new Vec3d(0.5, 0.1, 0.5);
-			case NORTH_WEST:
-				return new Vec3d(0.25, 0.1, 0.25);
-			case SOUTH_EAST:
-				return new Vec3d(0.75, 0.1, 0.75);
-			case SOUTH_WEST:
-				return new Vec3d(0.25, 0.1, 0.75);
-			default:
-				return null;
-		}
-	}
-
 	@Override
 	public Vec3d getNextPosition(Vec3d currentPosition, Vec3d motion) {
-		Vec3d trackMovement = getTrackVector();
-		Vec3d trackCenter = getTrackCenter();
+		Vec3d trackMovement = vectors.get(direction);
+		Vec3d trackCenter = centers.get(direction);
 
 		Vec3d posRelativeToCenter = currentPosition.subtractReverse(new Vec3d(pos).add(trackCenter));
 		double distanceToCenter = posRelativeToCenter.lengthVector();

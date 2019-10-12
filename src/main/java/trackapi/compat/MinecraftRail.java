@@ -68,17 +68,17 @@ public class MinecraftRail implements ITrack {
 			case ASCENDING_WEST:
 				return new Vec3d(0.5, 0.5, 0.5);
 			case EAST_WEST:
-				return new Vec3d(0.5, 0, 0.5);
+				return new Vec3d(0.5, 0.1, 0.5);
 			case NORTH_EAST:
-				return new Vec3d(0.75, 0, 0.25);
+				return new Vec3d(0.75, 0.1, 0.25);
 			case NORTH_SOUTH:
-				return new Vec3d(0.5, 0, 0.5);
+				return new Vec3d(0.5, 0.1, 0.5);
 			case NORTH_WEST:
-				return new Vec3d(0.25, 0, 0.25);
+				return new Vec3d(0.25, 0.1, 0.25);
 			case SOUTH_EAST:
-				return new Vec3d(0.75, 0, 0.75);
+				return new Vec3d(0.75, 0.1, 0.75);
 			case SOUTH_WEST:
-				return new Vec3d(0.25, 0, 0.75);
+				return new Vec3d(0.25, 0.1, 0.75);
 			default:
 				return null;
 		}
@@ -102,11 +102,6 @@ public class MinecraftRail implements ITrack {
 		newPosition = newPosition.add(trackMovement.scale(trackPosMotionInverted ? -distanceToCenter : distanceToCenter));
 		// Move new pos along track alignment
 		newPosition = newPosition.add(trackMovement.scale(trackMotionInverted ? -motion.lengthVector() : motion.lengthVector()));
-		// Bump off the ground a bit
-		newPosition = newPosition.addVector(0, 0.1, 0);
-		if (newPosition.distanceTo(currentPosition) > motion.lengthVector()*2) {
-			System.out.println(newPosition.distanceTo(currentPosition));
-		}
 		return newPosition;
 	}
 

@@ -40,11 +40,11 @@ public class MinecraftRail implements ITrack {
 		case ASCENDING_WEST:
 			break;
 		case EAST_WEST:
-			return currentPosition.addVector(motion.xCoord > 0 ? motion.lengthVector() : -motion.lengthVector(), 0, pos.getZ() - currentPosition.zCoord + 0.5);
+			return currentPosition.addVector(motion.x > 0 ? motion.lengthVector() : -motion.lengthVector(), 0, pos.getZ() - currentPosition.z + 0.5);
 		case NORTH_EAST:
 			break;
 		case NORTH_SOUTH:
-			return currentPosition.addVector(pos.getX() - currentPosition.xCoord + 0.5, 0, motion.zCoord > 0 ? motion.lengthVector() : -motion.lengthVector());
+			return currentPosition.addVector(pos.getX() - currentPosition.x + 0.5, 0, motion.z > 0 ? motion.lengthVector() : -motion.lengthVector());
 		case NORTH_WEST:
 			break;
 		case SOUTH_EAST:

@@ -9,7 +9,7 @@ import trackapi.compat.MinecraftRail;
 
 public class Util {
 	private static ITrack getInternalTileEntity(final World world, Vec3d pos, boolean acceptMinecraftRails) {
-		final BlockPos bp = new BlockPos(Math.floor(pos.xCoord), Math.floor(pos.yCoord), Math.floor(pos.zCoord));
+		final BlockPos bp = new BlockPos(Math.floor(pos.x), Math.floor(pos.y), Math.floor(pos.z));
 		IBlockState bs = world.getBlockState(bp);
 		
 		if (bs.getBlock() instanceof ITrackBlock) {

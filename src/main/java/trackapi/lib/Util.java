@@ -3,12 +3,12 @@ package trackapi.lib;
 import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import trackapi.compat.MinecraftRail;
 
 public class Util {
-	private static ITrack getInternalTileEntity(final World world, Vec3d pos, boolean acceptMinecraftRails) {
+	private static ITrack getInternalTileEntity(final World world, Vector3d pos, boolean acceptMinecraftRails) {
 		final BlockPos bp = new BlockPos(Math.floor(pos.x), Math.floor(pos.y), Math.floor(pos.z));
 		BlockState bs = world.getBlockState(bp);
 		
@@ -22,7 +22,7 @@ public class Util {
 					return track.getTrackGauge(world, bp);
 				}
 				@Override
-				public Vec3d getNextPosition(Vec3d currentPosition, Vec3d motion) {
+				public Vector3d getNextPosition(Vector3d currentPosition, Vector3d motion) {
 					return track.getNextPosition(world, bp, currentPosition, motion);
 				}
 			};
@@ -40,7 +40,7 @@ public class Util {
 		return null;
 	}
 	
-	public static ITrack getTileEntity(World world, Vec3d pos, boolean acceptMinecraftRails) {
+	public static ITrack getTileEntity(World world, Vector3d pos, boolean acceptMinecraftRails) {
 		ITrack track = getInternalTileEntity(world, pos, acceptMinecraftRails);
 		if (track != null) {
 			return track;

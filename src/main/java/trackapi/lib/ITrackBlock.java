@@ -1,7 +1,7 @@
 package trackapi.lib;
 
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 /**
@@ -27,5 +27,5 @@ public interface ITrackBlock {
 	 * @param distance - Distanced traveled in meters
 	 * @return The new position of the entity or bogey
 	 */
-	public Vec3d getNextPosition(World world, BlockPos pos, Vec3d currentPosition, Vec3d motion);
+	public Vector3d getNextPosition(World world, BlockPos pos, Vector3d currentPosition, Vector3d motion);
 }

@@ -1,6 +1,6 @@
 package trackapi.lib;
 
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 
 public interface ITrack {
 	
@@ -21,5 +21,5 @@ public interface ITrack {
 	 * @param distance - Distanced traveled in meters
 	 * @return The new position of the entity or bogey
 	 */
-	public Vec3d getNextPosition(Vec3d currentPosition, Vec3d motion);
+	public Vector3d getNextPosition(Vector3d currentPosition, Vector3d motion);
 }

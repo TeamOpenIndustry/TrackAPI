@@ -5,7 +5,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.minecart.MinecartEntity;
 import net.minecraft.state.properties.RailShape;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import trackapi.lib.Gauges;
 import trackapi.lib.ITrack;
@@ -14,14 +14,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MinecraftRail implements ITrack {
-	private static Map<RailShape, Vec3d> vectors = new HashMap<>();
-	private static Map<RailShape, Vec3d> centers = new HashMap<>();
+	private static Map<RailShape, Vector3d> vectors = new HashMap<>();
+	private static Map<RailShape, Vector3d> centers = new HashMap<>();
 	static {
-		Vec3d north = new Vec3d(0, 0, 1);
-		Vec3d south = new Vec3d(0, 0, -1);
-		Vec3d east = new Vec3d(1, 0, 0);
-		Vec3d west = new Vec3d(-1, 0, 0);
-		Vec3d ascending = new Vec3d(0, 1, 0);
+		Vector3d north = new Vector3d(0, 0, 1);
+		Vector3d south = new Vector3d(0, 0, -1);
+		Vector3d east = new Vector3d(1, 0, 0);
+		Vector3d west = new Vector3d(-1, 0, 0);
+		Vector3d ascending = new Vector3d(0, 1, 0);
 
         vectors.put(RailShape.ASCENDING_EAST, east.add(ascending).normalize());
         vectors.put(RailShape.ASCENDING_NORTH, north.add(ascending).normalize());
@@ -34,16 +34,16 @@ public class MinecraftRail implements ITrack {
         vectors.put(RailShape.SOUTH_EAST, south.add(east).normalize());
         vectors.put(RailShape.SOUTH_WEST, south.add(west).normalize());
 
-        centers.put(RailShape.ASCENDING_EAST, new Vec3d(0.5, 0.5, 0.5));
-        centers.put(RailShape.ASCENDING_NORTH, new Vec3d(0.5, 0.5, 0.5));
-        centers.put(RailShape.ASCENDING_SOUTH, new Vec3d(0.5, 0.5, 0.5));
-        centers.put(RailShape.ASCENDING_WEST, new Vec3d(0.5, 0.5, 0.5));
-        centers.put(RailShape.EAST_WEST, new Vec3d(0.5, 0.1, 0.5));
-        centers.put(RailShape.NORTH_EAST, new Vec3d(0.75, 0.1, 0.25));
-        centers.put(RailShape.NORTH_SOUTH, new Vec3d(0.5, 0.1, 0.5));
-        centers.put(RailShape.NORTH_WEST, new Vec3d(0.25, 0.1, 0.25));
-        centers.put(RailShape.SOUTH_EAST, new Vec3d(0.75, 0.1, 0.75));
-        centers.put(RailShape.SOUTH_WEST, new Vec3d(0.25, 0.1, 0.75));
+        centers.put(RailShape.ASCENDING_EAST, new Vector3d(0.5, 0.5, 0.5));
+        centers.put(RailShape.ASCENDING_NORTH, new Vector3d(0.5, 0.5, 0.5));
+        centers.put(RailShape.ASCENDING_SOUTH, new Vector3d(0.5, 0.5, 0.5));
+        centers.put(RailShape.ASCENDING_WEST, new Vector3d(0.5, 0.5, 0.5));
+        centers.put(RailShape.EAST_WEST, new Vector3d(0.5, 0.1, 0.5));
+        centers.put(RailShape.NORTH_EAST, new Vector3d(0.75, 0.1, 0.25));
+        centers.put(RailShape.NORTH_SOUTH, new Vector3d(0.5, 0.1, 0.5));
+        centers.put(RailShape.NORTH_WEST, new Vector3d(0.25, 0.1, 0.25));
+        centers.put(RailShape.SOUTH_EAST, new Vector3d(0.75, 0.1, 0.75));
+        centers.put(RailShape.SOUTH_WEST, new Vector3d(0.25, 0.1, 0.75));
 	}
 
 
@@ -63,11 +63,11 @@ public class MinecraftRail implements ITrack {
 	}
 
 	@Override
-	public Vec3d getNextPosition(Vec3d currentPosition, Vec3d motion) {
-		Vec3d trackMovement = vectors.get(direction);
-		Vec3d trackCenter = centers.get(direction);
+	public Vector3d getNextPosition(Vector3d currentPosition, Vector3d motion) {
+		Vector3d trackMovement = vectors.get(direction);
+		Vector3d trackCenter = centers.get(direction);
 
-		Vec3d posRelativeToCenter = currentPosition.subtractReverse(new Vec3d(pos).add(trackCenter));
+		Vector3d posRelativeToCenter = currentPosition.subtractReverse(Vector3d.copy(pos).add(trackCenter));
 		double distanceToCenter = posRelativeToCenter.length();
 
 		// Determine if trackMovement should be positive or negative as relative to block center
@@ -75,7 +75,7 @@ public class MinecraftRail implements ITrack {
 
 		boolean trackMotionInverted = motion.distanceTo(trackMovement) > motion.scale(-1).distanceTo(trackMovement);
 
-		Vec3d newPosition = new Vec3d(pos).add(trackCenter);
+		Vector3d newPosition = Vector3d.copy(pos).add(trackCenter);
 		//Correct new pos to track alignment
 		newPosition = newPosition.add(trackMovement.scale(trackPosMotionInverted ? -distanceToCenter : distanceToCenter));
 		// Move new pos along track alignment

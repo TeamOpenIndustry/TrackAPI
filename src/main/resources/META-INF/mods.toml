@@ -1,5 +1,6 @@
 modLoader="javafml" 
-loaderVersion="[31,)" 
+loaderVersion="[31,)"
+license="MIT"
 [[mods]]
 modId="trackapi" 
 version="1.2" 
@@ -15,6 +16,6 @@ description='''A common track interface for minecraft forge'''
 [[dependencies.trackapi]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.15.2]"
+    versionRange="[1.16.4]"
     ordering="NONE"
     side="BOTH"

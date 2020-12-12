@@ -1,23 +1,32 @@
+import cam72cam.universalmodcore.Util;
+
 buildscript {
     repositories {
         maven { url = 'https://files.minecraftforge.net/maven' }
+        maven { url = "https://teamopenindustry.cc/maven" }
         jcenter()
         mavenCentral()
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+        classpath 'cam72cam.universalmodcore:UniversalModCoreGradle:0.1.3'
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
+apply plugin: 'maven'
 apply plugin: 'maven-publish'
 
-version = '1.2'
-group = 'trackapi' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'TrackAPI'
-
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+
+String baseVersion = "1.2"
+if (!"release".equalsIgnoreCase(System.getProperty("target"))) {
+    baseVersion += "-" + Util.GitRevision()
+}
+version = "1.16.4-forge-" + baseVersion
+group = "trackapi" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "TrackAPI"
 
 minecraft {
     // The mappings can be changed at any time, and must be in the following format.
@@ -147,3 +156,23 @@ publishing {
         }
     }
 }
+
+task deployJar(type: Jar)
+
+configurations {
+    deployerJars
+}
+
+dependencies {
+    deployerJars "org.apache.maven.wagon:wagon-ssh:2.9"
+}
+
+uploadArchives {
+    repositories.mavenDeployer {
+        configuration = configurations.deployerJars
+        repository(url: "scp://teamopenindustry.cc/var/www/html/maven/") {
+            authentication(userName: "mavenci", privateKey: "publish_key")
+        }
+    }
+}
+

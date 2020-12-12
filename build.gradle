@@ -27,7 +27,7 @@ String baseVersion = "1.2"
 if (!"release".equalsIgnoreCase(System.getProperty("target"))) {
     baseVersion += "-" + Util.GitRevision()
 }
-version = "1.12.2-forge-" + baseVersion
+version = "1.7.10-forge-" + baseVersion
 group = "trackapi" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "TrackAPI"
 

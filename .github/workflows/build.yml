@@ -19,7 +19,7 @@ jobs:
             - name: secrets
               env:
                 MAVENCI: ${{ secrets.MAVENCI }}
-              run: mkdir -p /home/runner/.gradle/daemon/6.9/ && echo "${MAVENCI}" >> /home/runner/.gradle/daemon/6.9/publish_key
+              run: mkdir -p /home/runner/.gradle/daemon/6.9/ && echo "${MAVENCI}" >> /home/runner/.gradle/daemon/6.9/publish_key &&  echo "${MAVENCI}" >> publish_key
             - name: Gradle uploadArchives
               run: ./gradlew uploadArchives
             - name: cleanup

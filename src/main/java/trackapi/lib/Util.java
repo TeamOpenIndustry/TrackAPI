@@ -28,7 +28,7 @@ public class Util {
 			};
 		}
 		
-		TileEntity te = world.getTileEntity(bp);
+		TileEntity te = world.getBlockEntity(bp);
 		if (te instanceof ITrack) {
 			return (ITrack) te;
 		}

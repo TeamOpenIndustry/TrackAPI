@@ -67,7 +67,7 @@ public class MinecraftRail implements ITrack {
 		Vector3d trackMovement = vectors.get(direction);
 		Vector3d trackCenter = centers.get(direction);
 
-		Vector3d posRelativeToCenter = currentPosition.subtractReverse(Vector3d.copy(pos).add(trackCenter));
+		Vector3d posRelativeToCenter = currentPosition.vectorTo(Vector3d.atLowerCornerOf(pos).add(trackCenter));
 		double distanceToCenter = posRelativeToCenter.length();
 
 		// Determine if trackMovement should be positive or negative as relative to block center
@@ -75,7 +75,7 @@ public class MinecraftRail implements ITrack {
 
 		boolean trackMotionInverted = motion.distanceTo(trackMovement) > motion.scale(-1).distanceTo(trackMovement);
 
-		Vector3d newPosition = Vector3d.copy(pos).add(trackCenter);
+		Vector3d newPosition = Vector3d.atLowerCornerOf(pos).add(trackCenter);
 		//Correct new pos to track alignment
 		newPosition = newPosition.add(trackMovement.scale(trackPosMotionInverted ? -distanceToCenter : distanceToCenter));
 		// Move new pos along track alignment

@@ -176,7 +176,7 @@ uploadArchives {
     repositories.mavenDeployer {
         configuration = configurations.deployerJars
         repository(url: "scp://teamopenindustry.cc/var/www/html/maven/") {
-            authentication(userName: "mavenci", privateKey: "/home/runner/publish_key")
+            authentication(userName: "mavenci", privateKey: "publish_key")
         }
     }
 }

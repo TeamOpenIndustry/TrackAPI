@@ -19,7 +19,7 @@ plugins {
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
-version = "1.12.2-fabric-" + project.mod_version
+version = "1.14.4-fabric-" + project.mod_version
 
 if (!"release".equalsIgnoreCase(System.getProperty("target"))) {
     version += "-" + Util.GitRevision()

@@ -46,8 +46,8 @@ public class MinecraftRail implements ITrack {
 	}
 
 
-	private final RailShape direction;
-	private final BlockPos pos;
+	private RailShape direction;
+	private BlockPos pos;
 
 	public MinecraftRail(World world, BlockPos pos) {
 		this.pos = pos;

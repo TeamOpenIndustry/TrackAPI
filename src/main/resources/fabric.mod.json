@@ -6,7 +6,8 @@
   "name": "Track API",
   "description": "A common track interface for minecraft",
   "authors": [
-    "cam72cam"
+    "cam72cam",
+    "Mae Rosaline"
   ],
   "contact": {
   },
@@ -23,7 +24,7 @@
   ],
 
   "depends": {
-    "fabricloader": ">=0.4.0",
+    "fabricloader": ">=0.11.6",
     "fabric": "*"
   },
   "suggests": {

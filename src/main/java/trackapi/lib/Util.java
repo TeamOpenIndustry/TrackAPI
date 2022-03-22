@@ -1,14 +1,14 @@
 package trackapi.lib;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import trackapi.compat.MinecraftRail;
 
 public class Util {
-	private static ITrack getInternalTileEntity(final World world, Vector3d pos, boolean acceptMinecraftRails) {
+	private static ITrack getInternalTileEntity(final Level world, Vec3 pos, boolean acceptMinecraftRails) {
 		final BlockPos bp = new BlockPos(Math.floor(pos.x), Math.floor(pos.y), Math.floor(pos.z));
 		BlockState bs = world.getBlockState(bp);
 		
@@ -22,13 +22,13 @@ public class Util {
 					return track.getTrackGauge(world, bp);
 				}
 				@Override
-				public Vector3d getNextPosition(Vector3d currentPosition, Vector3d motion) {
+				public Vec3 getNextPosition(Vec3 currentPosition, Vec3 motion) {
 					return track.getNextPosition(world, bp, currentPosition, motion);
 				}
 			};
 		}
 		
-		TileEntity te = world.getBlockEntity(bp);
+		BlockEntity te = world.getBlockEntity(bp);
 		if (te instanceof ITrack) {
 			return (ITrack) te;
 		}
@@ -40,7 +40,7 @@ public class Util {
 		return null;
 	}
 	
-	public static ITrack getTileEntity(World world, Vector3d pos, boolean acceptMinecraftRails) {
+	public static ITrack getTileEntity(Level world, Vec3 pos, boolean acceptMinecraftRails) {
 		ITrack track = getInternalTileEntity(world, pos, acceptMinecraftRails);
 		if (track != null) {
 			return track;

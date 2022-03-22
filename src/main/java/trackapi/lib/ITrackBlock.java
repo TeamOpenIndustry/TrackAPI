@@ -1,8 +1,8 @@
 package trackapi.lib;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 /**
  * Compatibility layer for block only tracks
@@ -16,7 +16,7 @@ public interface ITrackBlock {
 	 * @see Gauges#STANDARD
 	 * @see Gauges#MINECRAFT
 	 */
-	public double getTrackGauge(World world, BlockPos pos);
+	public double getTrackGauge(Level world, BlockPos pos);
 	
 	/**
 	 * Used by rolling stock to look up their next position.
@@ -27,5 +27,5 @@ public interface ITrackBlock {
 	 * @param distance - Distanced traveled in meters
 	 * @return The new position of the entity or bogey
 	 */
-	public Vector3d getNextPosition(World world, BlockPos pos, Vector3d currentPosition, Vector3d motion);
+	public Vec3 getNextPosition(Level world, BlockPos pos, Vec3 currentPosition, Vec3 motion);
 }

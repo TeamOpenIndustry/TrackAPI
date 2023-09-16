@@ -137,7 +137,28 @@ jar {
     }
 }
 
-//jar.finalizedBy('reobfJar')
+jar.finalizedBy('reobfJar')
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact jar
+        }
+    }
+    repositories {
+        maven {
+            url "sftp://teamopenindustry.cc:22/var/www/html/maven/"
+            credentials {
+                username = "mavenci"
+                password = System.getenv("MAVENCI_PASS")
+            }
+        }
+    }
+}
+
+
+
+
 /*
 // Example configuration to allow publishing using the maven-publish task
 // we define a custom artifact that is sourced from the reobfJar output task

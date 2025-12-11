@@ -29,7 +29,7 @@ String baseVersion = "1.2"
 if (!"release".equalsIgnoreCase(System.getProperty("target"))) {
     baseVersion += "-" + Util.GitRevision()
 }
-version = "1.20.4-forge-" + baseVersion
+version = "1.20.4-neoforge-" + baseVersion
 group = "trackapi" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "TrackAPI"
 
@@ -81,9 +81,7 @@ runs {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
-    // Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
-    // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
-    // The userdev artifact is a special name and will get all sorts of transformations applied to it.
+
     implementation 'net.neoforged:neoforge:20.4.251'
 
     // You may put jars on which you depend on in ./libs or you may define them like so..

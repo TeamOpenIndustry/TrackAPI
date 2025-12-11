@@ -1,21 +1,21 @@
-modLoader="javafml" 
-loaderVersion="[47,)"
+modLoader="javafml"
+loaderVersion="[2,)"
 license="MIT"
 [[mods]]
 modId="trackapi" 
 version="1.2" 
 displayName="TrackAPI" 
 authors="cam72cam" 
-description='''A common track interface for minecraft forge'''
+description='''A common track interface for neoforge'''
 [[dependencies.trackapi]] 
-    modId="forge" 
-    mandatory=true 
-    versionRange="[47,)"
+    modId="neoforge"
+    type='required'
+    versionRange="[20.4.1,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.trackapi]]
     modId="minecraft"
-    mandatory=true
-    versionRange="[1.20.1]"
+    type='required'
+    versionRange="[1.20.4]"
     ordering="NONE"
     side="BOTH"

@@ -1,6 +1,6 @@
 package trackapi;
 
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.fml.common.Mod;
 
 @Mod(TrackAPI.MODID)
 public class TrackAPI

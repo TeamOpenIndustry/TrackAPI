@@ -2,7 +2,6 @@ package trackapi.compat;
 
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.vehicle.Minecart;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseRailBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -54,7 +53,7 @@ public class MinecraftRail implements ITrack {
 		this.pos = pos;
 		BlockState state = world.getBlockState(pos);
         BaseRailBlock blockrailbase = (BaseRailBlock)state.getBlock();
-        this.direction = blockrailbase.getRailDirection(state, world, pos, new Minecart(world, pos.getX(), pos.getY(), pos.getZ()));
+        this.direction = blockrailbase.getRailDirection(state, world, pos, null/*new Minecart(world, pos.getX(), pos.getY(), pos.getZ())*/);
 	}
 
 	@Override

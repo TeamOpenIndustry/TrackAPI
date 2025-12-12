@@ -29,7 +29,7 @@ String baseVersion = "1.2"
 if (!"release".equalsIgnoreCase(System.getProperty("target"))) {
     baseVersion += "-" + Util.GitRevision()
 }
-version = "1.21.4-neoforge-" + baseVersion
+version = "1.21.8-neoforge-" + baseVersion
 group = "trackapi" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "TrackAPI"
 
@@ -82,7 +82,7 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
 
-    implementation 'net.neoforged:neoforge:21.4.156'
+    implementation 'net.neoforged:neoforge:21.8.52'
 
     // You may put jars on which you depend on in ./libs or you may define them like so..
     // compile "some.group:artifact:version:classifier"

@@ -10,12 +10,12 @@ description='''A common track interface for neoforge'''
 [[dependencies.trackapi]] 
     modId="neoforge"
     type='required'
-    versionRange="[21.4.1,)"
+    versionRange="[21.8.1,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.trackapi]]
     modId="minecraft"
     type='required'
-    versionRange="[1.21.4]"
+    versionRange="[1.21.8]"
     ordering="NONE"
     side="BOTH"

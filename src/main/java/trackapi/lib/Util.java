@@ -22,7 +22,7 @@ public class Util {
 					return track.getTrackGauge(world, bp);
 				}
 				@Override
-				public Vec3d getNextPosition(Vec3d currentPosition, Vec3d motion) {
+				public PathingContext getNextPosition(Vec3d currentPosition, Vec3d motion) {
 					return track.getNextPosition(world, bp, currentPosition, motion);
 				}
 			};

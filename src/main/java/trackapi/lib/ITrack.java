@@ -16,7 +16,7 @@ public interface ITrack {
 	 * Used by rolling stock to look up their next position.
 	 * 
 	 * @param currentPosition - Current entity or bogey position
-	 * @return The new position of the entity or bogey
+	 * @return PathingContext object contains related data regarding next point found
 	 */
-	Vec3d getNextPosition(Vec3d currentPosition, Vec3d motion);
+	PathingContext getNextPosition(Vec3d currentPosition, Vec3d motion);
 }

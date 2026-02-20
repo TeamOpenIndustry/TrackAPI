@@ -8,6 +8,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import trackapi.lib.Gauges;
 import trackapi.lib.ITrack;
+import trackapi.lib.PathingContext;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -62,7 +63,7 @@ public class MinecraftRail implements ITrack {
 	}
 
 	@Override
-	public Vec3d getNextPosition(Vec3d currentPosition, Vec3d motion) {
+	public PathingContext getNextPosition(Vec3d currentPosition, Vec3d motion) {
 		Vec3d trackMovement = vectors.get(direction);
 		Vec3d trackCenter = centers.get(direction);
 
@@ -79,7 +80,7 @@ public class MinecraftRail implements ITrack {
 		newPosition = newPosition.add(trackMovement.scale(trackPosMotionInverted ? -distanceToCenter : distanceToCenter));
 		// Move new pos along track alignment
 		newPosition = newPosition.add(trackMovement.scale(trackMotionInverted ? -motion.length() : motion.length()));
-		return newPosition;
+		return new PathingContext(newPosition).with(PathingContext.MOVEMENT, newPosition.distanceTo(currentPosition));
 	}
 
 	public static boolean isRail(World world, BlockPos pos) {

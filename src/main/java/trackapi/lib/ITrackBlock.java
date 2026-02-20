@@ -24,5 +24,5 @@ public interface ITrackBlock {
 	 * @param currentPosition - Current entity or bogey position
 	 * @return The new position of the entity or bogey
 	 */
-	Vec3d getNextPosition(World world, BlockPos pos, Vec3d currentPosition, Vec3d motion);
+	PathingContext getNextPosition(World world, BlockPos pos, Vec3d currentPosition, Vec3d motion);
 }

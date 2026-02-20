@@ -2,16 +2,16 @@ package trackapi.lib;
 
 import net.minecraft.util.math.Vec3d;
 
-import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Helper class for bundled pathing data transformation
  */
 public final class PathingContext {
-    private static final Map<String, TrackData<?>> registered = new HashMap<>();
+    private static final Map<String, TrackData<?>> registered = new ConcurrentHashMap<>();
 
     private final Map<TrackData<?>, Object> dataMap;
 
@@ -41,6 +41,10 @@ public final class PathingContext {
         return key.type().cast(value);
     }
 
+    public void reset(TrackData<?> key) {
+        dataMap.remove(key);
+    }
+
     public Vec3d pos() {
         return pos;
     }
@@ -62,9 +66,24 @@ public final class PathingContext {
 
     @SuppressWarnings("unchecked")
     public static <T> TrackData<T> createKey(String name, Class<T> type, T fallback) {
-        return (TrackData<T>) registered.computeIfAbsent(name, str -> new TrackData<>(name, type, fallback));
+        TrackData<?> existing = registered.get(name);
+        if (existing != null) {
+            if (!existing.type().equals(type)) {
+                throw new IllegalStateException("Key '" + name + "' already registered with different type");
+            }
+            return (TrackData<T>) existing;
+        }
+        TrackData<T> data = new TrackData<>(name, type, fallback);
+        registered.put(name, data);
+        return data;
     }
 
+    /**
+     * Typed key for PathingContext's data storage
+     * <p>
+     * Please note this is only used in <code>IdentityHashMap</code>, and should not be used externally
+     * @param <T> type of the value
+     */
     public static class TrackData<T> {
         private final String name;
         private final Class<T> type;
@@ -88,11 +107,6 @@ public final class PathingContext {
 
         public T fallback() {
             return fallback;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(name, type, fallback);
         }
 
         @Override

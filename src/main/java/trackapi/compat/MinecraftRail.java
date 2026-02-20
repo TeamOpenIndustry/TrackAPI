@@ -13,9 +13,12 @@ import trackapi.lib.PathingContext;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Wrapper for vanilla rail
+ */
 public class MinecraftRail implements ITrack {
-	private static Map<EnumRailDirection, Vec3d> vectors = new HashMap<>();
-	private static Map<EnumRailDirection, Vec3d> centers = new HashMap<>();
+	private static final Map<EnumRailDirection, Vec3d> vectors = new HashMap<>();
+	private static final Map<EnumRailDirection, Vec3d> centers = new HashMap<>();
 	static {
 		Vec3d north = new Vec3d(0, 0, 1);
 		Vec3d south = new Vec3d(0, 0, -1);

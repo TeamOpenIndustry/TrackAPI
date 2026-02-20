@@ -8,7 +8,7 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Helper class for bundled pathing data transformation
+ * Helper class for transferring bundled pathing data
  */
 public final class PathingContext {
     private static final Map<String, TrackData<?>> registered = new ConcurrentHashMap<>();

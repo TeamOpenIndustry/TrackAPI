@@ -39,7 +39,14 @@ public class Util {
 		}
 		return null;
 	}
-	
+
+	/**
+	 * Used for finding acceptable track in given world
+	 * @param world World to query
+	 * @param pos Current position of stock or bogey
+	 * @param acceptMinecraftRails Should we take vanilla rails into consideration?
+	 * @return Potential ITrack, or null if failed to find a valid one
+	 */
 	public static ITrack getTileEntity(World world, Vec3d pos, boolean acceptMinecraftRails) {
 		ITrack track = getInternalTileEntity(world, pos, acceptMinecraftRails);
 		if (track != null) {

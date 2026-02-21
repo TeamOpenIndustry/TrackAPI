@@ -18,7 +18,7 @@ public final class PathingContext {
     private final Map<TrackData<?>, Object> dataMap;
 
     //We have next found pos by default
-    private final Vec3d pos;
+    public final Vec3d pos;
     //And some built-in fields that are filled in
     //Moved distance between current pos and next pos
     public static final TrackData<Double> DELTA_MOVEMENT = createOrGetKey("delta_movement", Double.class, 0d);
@@ -49,11 +49,7 @@ public final class PathingContext {
         dataMap.remove(key);
     }
 
-    public Vec3d pos() {
-        return pos;
-    }
-
-    //And for those don't want to use Minecraft's Vec3d directly
+    //For those don't want to use Minecraft's Vec3d directly
     public double x() {
         return pos.x;
     }

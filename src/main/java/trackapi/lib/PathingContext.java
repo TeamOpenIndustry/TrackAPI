@@ -21,10 +21,10 @@ public final class PathingContext {
     private final Vec3d pos;
     //And some built-in fields that are filled in
     //Moved distance between current pos and next pos
-    public static final TrackData<Double> DELTA_MOVEMENT = createKey("delta_movement", Double.class, 0d);
+    public static final TrackData<Double> DELTA_MOVEMENT = createOrGetKey("delta_movement", Double.class, 0d);
     //And we expect you to fill in these
     //Track roll for stocks to do superelevation (rotated from middle of the rails)
-    public static final TrackData<Double> ROLL_DEGREES = createKey("roll_degrees", Double.class, 0d);
+    public static final TrackData<Double> ROLL_DEGREES = createOrGetKey("roll_degrees", Double.class, 0d);
 
     public PathingContext(Vec3d pos) {
         this.pos = Objects.requireNonNull(pos, "pos cannot be null");
@@ -64,12 +64,12 @@ public final class PathingContext {
         return pos.z;
     }
 
-    public static <T> TrackData<T> createKey(String name, Class<T> type) {
-        return createKey(name, type, null);
+    public static <T> TrackData<T> createOrGetKey(String name, Class<T> type) {
+        return createOrGetKey(name, type, null);
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> TrackData<T> createKey(String name, Class<T> type, T fallback) {
+    public static <T> TrackData<T> createOrGetKey(String name, Class<T> type, T fallback) {
         TrackData<?> existing = registered.get(name);
         if (existing != null) {
             if (!existing.type().equals(type)) {

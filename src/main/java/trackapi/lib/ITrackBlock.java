@@ -17,7 +17,7 @@ public interface ITrackBlock {
 	double getTrackGauge(World world, BlockPos pos);
 	
 	/**
-	 * Used by rolling stock to look up their next position.
+	 * Used by rolling stock to look up their next position (and related data).
 	 *
 	 * @param world World to query
 	 * @param pos Position of the block

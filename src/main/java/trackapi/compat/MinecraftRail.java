@@ -83,7 +83,7 @@ public class MinecraftRail implements ITrack {
 		newPosition = newPosition.add(trackMovement.scale(trackPosMotionInverted ? -distanceToCenter : distanceToCenter));
 		// Move new pos along track alignment
 		newPosition = newPosition.add(trackMovement.scale(trackMotionInverted ? -motion.length() : motion.length()));
-		return new PathingContext(newPosition).with(PathingContext.MOVEMENT, newPosition.distanceTo(currentPosition));
+		return new PathingContext(newPosition).with(PathingContext.DELTA_MOVEMENT, newPosition.distanceTo(currentPosition));
 	}
 
 	public static boolean isRail(World world, BlockPos pos) {

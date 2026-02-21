@@ -9,17 +9,21 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Helper class for transferring bundled pathing data
+ * <p>
+ * Users could define associated data to pass from track to stock
  */
 public final class PathingContext {
     private static final Map<String, TrackData<?>> registered = new ConcurrentHashMap<>();
 
     private final Map<TrackData<?>, Object> dataMap;
 
-    //We have pos by default
+    //We have next found pos by default
     private final Vec3d pos;
     //And some built-in fields that are filled in
-    public static final TrackData<Double> MOVEMENT = createKey("movement", Double.class, 0d);
-    //And we expect you to fill in this
+    //Moved distance between current pos and next pos
+    public static final TrackData<Double> DELTA_MOVEMENT = createKey("delta_movement", Double.class, 0d);
+    //And we expect you to fill in these
+    //Track roll for stocks to do superelevation (rotated from middle of the rails)
     public static final TrackData<Double> ROLL_DEGREES = createKey("roll_degrees", Double.class, 0d);
 
     public PathingContext(Vec3d pos) {

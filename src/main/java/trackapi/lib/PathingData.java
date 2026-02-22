@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * <p>
  * Users could define associated data to pass from track to stock
  */
-public final class PathingData {
+public class PathingData {
 
     //We have next found pos and roll by default
     public final Vec3d position;

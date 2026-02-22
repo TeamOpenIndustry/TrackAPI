@@ -64,27 +64,26 @@ public class MinecraftRail implements ITrackV2 {
 	}
 
 	@Override
-	public PathingData getNextPosition(PathingData inputData, Vec3 motion, double gauge) {
-		Vec3d currentPositionWrapped = inputData.position.toVanilla();
-		Vec3d motionWrapped = motion.toVanilla();
+	public PathingData getNextPosition(PathingData inputData, Vec3d motion, double gauge) {
+		Vec3d currentPosition = inputData.position;
 
-		Vec3d trackMovement = vectors.get(direction);
+        Vec3d trackMovement = vectors.get(direction);
 		Vec3d trackCenter = centers.get(direction);
 
 		Vec3d pos = new Vec3d(this.pos).add(trackCenter);
-		Vec3d posRelativeToCenter = currentPositionWrapped.subtractReverse(pos);
+		Vec3d posRelativeToCenter = currentPosition.subtractReverse(pos);
 		double distanceToCenter = posRelativeToCenter.length();
 
 		// Determine if trackMovement should be positive or negative as relative to block center
 		boolean trackPosMotionInverted = posRelativeToCenter.distanceTo(trackMovement) < posRelativeToCenter.scale(-1).distanceTo(trackMovement);
 
-		boolean trackMotionInverted = motionWrapped.distanceTo(trackMovement) > motionWrapped.scale(-1).distanceTo(trackMovement);
+		boolean trackMotionInverted = motion.distanceTo(trackMovement) > motion.scale(-1).distanceTo(trackMovement);
 
 		Vec3d newPosition = pos;
 		//Correct new pos to track alignment
 		newPosition = newPosition.add(trackMovement.scale(trackPosMotionInverted ? -distanceToCenter : distanceToCenter));
 		// Move new pos along track alignment
-		newPosition = newPosition.add(trackMovement.scale(trackMotionInverted ? -motionWrapped.length() : motionWrapped.length()));
+		newPosition = newPosition.add(trackMovement.scale(trackMotionInverted ? -motion.length() : motion.length()));
 		return new PathingData(newPosition, 0d).fromPrev(inputData);
 	}
 

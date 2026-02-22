@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class PathingData {
 
     //We have next found pos and roll by default
-    public final Vec3 position;
+    public final Vec3d position;
     //Clockwise is positive when facing the direction of motion.
     public final double roll;
     private final Map<Key<?>, Object> extension;
@@ -26,10 +26,6 @@ public final class PathingData {
 
     //Wrapper for vanilla Vec3d
     public PathingData(Vec3d position, double roll) {
-        this(new Vec3(position), roll);
-    }
-
-    public PathingData(Vec3 position, double roll) {
         this.position = Objects.requireNonNull(position, "position cannot be null");
         this.roll = roll;
         this.extension = new IdentityHashMap<>();

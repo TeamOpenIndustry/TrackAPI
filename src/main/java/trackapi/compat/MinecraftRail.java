@@ -65,7 +65,7 @@ public class MinecraftRail implements ITrackV2 {
 
 	@Override
 	public PathingData getNextPosition(PathingData inputData, Vec3d motion, double gauge) {
-		Vec3d currentPosition = inputData.position;
+		Vec3d currentPosition = inputData.getPosition();
 
         Vec3d trackMovement = vectors.get(direction);
 		Vec3d trackCenter = centers.get(direction);

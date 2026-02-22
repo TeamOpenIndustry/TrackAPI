@@ -15,9 +15,9 @@ import java.util.concurrent.ConcurrentHashMap;
 public class PathingData {
 
     //We have next found pos and roll by default
-    public final Vec3d position;
+    private final Vec3d position;
     //Clockwise is positive when facing the direction of motion.
-    public final double roll;
+    private final double roll;
     private final Map<Key<?>, Object> extension;
     //And some common fields
     //Moved distance between current pos and next pos
@@ -35,6 +35,14 @@ public class PathingData {
         key.validate(value);
         extension.put(key, value);
         return this;
+    }
+
+    public Vec3d getPosition() {
+        return position;
+    }
+
+    public double getRoll() {
+        return roll;
     }
 
     public <T> T get(Key<T> key) {

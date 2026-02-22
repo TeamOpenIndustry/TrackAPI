@@ -12,14 +12,13 @@ public interface ITrackV2 extends ITrack {
     double[] getTrackGauges();
 
     /**
-     * Find next position and related data
-     * @param currentPosition Current entity or bogey position
+     * Used by rolling stocks to look up their next position and related data
+     * @param inputData WheelData contains required input parameters like current position and roll
      * @param motion Current velocity of entity or bogey
      * @param gauge Gauge of the pathing stock
-     * @param inputCtx The object contains other required input parameters
-     * @return PathingContext
+     * @return WheelData contains required output data for stock
      */
-    PathingContext getNextPosition(Vec3 currentPosition, Vec3 motion, double gauge, PathingContext inputCtx);
+    WheelData getNextPosition(WheelData inputData, Vec3 motion, double gauge);
 
     //Overrides for forward compatibility, don't use
     @Override
@@ -31,8 +30,7 @@ public interface ITrackV2 extends ITrack {
     @Override
     @Deprecated
     default Vec3d getNextPosition(Vec3d currentPosition, Vec3d motion) {
-        PathingContext ctx = new PathingContext(currentPosition, 0d);
-        getNextPosition(new Vec3(currentPosition), new Vec3(motion), getTrackGauge(), ctx);
-        return ctx.nextPos.toVanilla();
+        WheelData ctx = new WheelData(currentPosition, 0d);
+        return getNextPosition(ctx, new Vec3(motion), getTrackGauge()).position.toVanilla();
     }
 }

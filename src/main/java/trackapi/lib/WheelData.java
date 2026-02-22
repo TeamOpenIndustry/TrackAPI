@@ -12,71 +12,77 @@ import java.util.concurrent.ConcurrentHashMap;
  * <p>
  * Users could define associated data to pass from track to stock
  */
-public final class PathingContext {
+public final class WheelData {
 
     //We have next found pos and roll by default
-    public final Vec3 nextPos;
+    public final Vec3 position;
     public final double roll;
-    private final Map<TrackData<?>, Object> extension;
+    private final Map<Key<?>, Object> extension;
     //And some common fields
     //Moved distance between current pos and next pos
-    public static final TrackData<Double> DELTA_MOVEMENT = createOrGetKey("deltaMovement", Double.class);
+    public static final Key<Double> DELTA_MOVEMENT = createOrGetKey("deltaMovement", Double.class);
+    public static final Key<Double> DELTA_ROLL = createOrGetKey("deltaRoll", Double.class);
 
     //Wrapper for vanilla Vec3d
-    public PathingContext(Vec3d nextPos, double roll) {
-        this(new Vec3(nextPos), roll);
+    public WheelData(Vec3d position, double roll) {
+        this(new Vec3(position), roll);
     }
 
-    public PathingContext(Vec3 nextPos, double roll) {
-        this.nextPos = Objects.requireNonNull(nextPos, "nextPos cannot be null");
+    public WheelData(Vec3 position, double roll) {
+        this.position = Objects.requireNonNull(position, "position cannot be null");
         this.roll = roll;
         this.extension = new IdentityHashMap<>();
     }
 
-    public <T> PathingContext with(TrackData<T> key, T value) {
+    public <T> WheelData with(Key<T> key, T value) {
         key.validate(value);
         extension.put(key, value);
         return this;
     }
 
-    public <T> T get(TrackData<T> key) {
+    public <T> T get(Key<T> key) {
         return key.type().cast(extension.get(key));
     }
 
-    public void remove(TrackData<?> key) {
+    public void remove(Key<?> key) {
         extension.remove(key);
     }
 
-    public boolean containsKey(TrackData<?> key) {
+    public boolean containsKey(Key<?> key) {
         return extension.containsKey(key);
     }
 
+    public WheelData fromPrev(WheelData inputData) {
+        return this.with(DELTA_MOVEMENT, position.distanceTo(inputData.position))
+                   .with(DELTA_ROLL, roll - inputData.roll);
+    }
+
     @SuppressWarnings("unchecked")
-    public static <T> TrackData<T> createOrGetKey(String name, Class<T> type) {
-        TrackData<?> existing = TrackData.registered.get(name);
+    public static <T> Key<T> createOrGetKey(String name, Class<T> type) {
+        Key<?> existing = Key.registered.get(name);
         if (existing != null) {
             if (!existing.type().equals(type)) {
                 throw new IllegalStateException("Key '" + name + "' already registered with different type");
             }
-            return (TrackData<T>) existing;
+            return (Key<T>) existing;
         }
-        TrackData<T> data = new TrackData<>(name, type);
-        TrackData.registered.put(name, data);
-        return data;
+        Key<T> key = new Key<>(name, type);
+        Key.registered.put(name, key);
+        return key;
     }
 
     /**
-     * Typed key for PathingContext's data storage
+     * Typed key for WheelData's data storage
      * <p>
      * Please note this is only used in <code>IdentityHashMap</code>, and should not be used externally
      * @param <T> type of the value
      */
-    public static class TrackData<T> {
-        private static final Map<String, TrackData<?>> registered = new ConcurrentHashMap<>();
+    public static class Key<T> {
+        private static final Map<String, Key<?>> registered = new ConcurrentHashMap<>();
         private final String name;
         private final Class<T> type;
 
-        private TrackData(String name, Class<T> type) {
+        private Key(String name, Class<T> type) {
             this.name = Objects.requireNonNull(name);
             this.type = Objects.requireNonNull(type);
         }

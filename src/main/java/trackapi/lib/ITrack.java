@@ -12,7 +12,7 @@ public interface ITrack {
 	double getTrackGauge();
 	
 	/**
-	 * Used by rolling stocks to look up their next position (and related data).
+	 * Used by rolling stocks to look up their next position.
 	 * 
 	 * @param currentPosition Current position of entity or bogey
 	 * @param motion Current velocity of entity or bogey

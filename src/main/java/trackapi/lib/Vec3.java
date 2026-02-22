@@ -54,6 +54,10 @@ public class Vec3 {
         return x * x + y * y + z * z;
     }
 
+    public Double distanceTo(Vec3 other) {
+        return Math.sqrt((x - other.x) * (x - other.x) + (y - other.y) * (y - other.y) + (z - other.z) * (z - other.z));
+    }
+
     public Vec3d toVanilla() {
         return new Vec3d(this.x, this.y, this.z);
     }

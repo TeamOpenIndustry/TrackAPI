@@ -15,8 +15,8 @@ import java.util.Map;
  * Wrapper for vanilla rail
  */
 public class MinecraftRail implements ITrackV2 {
-	private static Map<EnumRailDirection, Vec3d> vectors = new HashMap<>();
-	private static Map<EnumRailDirection, Vec3d> centers = new HashMap<>();
+	private static final Map<EnumRailDirection, Vec3d> vectors = new HashMap<>();
+	private static final Map<EnumRailDirection, Vec3d> centers = new HashMap<>();
 	static {
 		Vec3d north = new Vec3d(0, 0, 1);
 		Vec3d south = new Vec3d(0, 0, -1);
@@ -48,8 +48,8 @@ public class MinecraftRail implements ITrackV2 {
 	}
 
 
-	private EnumRailDirection direction;
-	private BlockPos pos;
+	private final EnumRailDirection direction;
+	private final BlockPos pos;
 
 	public MinecraftRail(World world, BlockPos pos) {
 		this.pos = pos;
@@ -64,8 +64,8 @@ public class MinecraftRail implements ITrackV2 {
 	}
 
 	@Override
-	public PathingContext getNextPosition(Vec3 currentPosition, Vec3 motion, double gauge, PathingContext inputCtx) {
-		Vec3d currentPositionWrapped = currentPosition.toVanilla();
+	public WheelData getNextPosition(WheelData inputData, Vec3 motion, double gauge) {
+		Vec3d currentPositionWrapped = inputData.position.toVanilla();
 		Vec3d motionWrapped = motion.toVanilla();
 
 		Vec3d trackMovement = vectors.get(direction);
@@ -85,8 +85,7 @@ public class MinecraftRail implements ITrackV2 {
 		newPosition = newPosition.add(trackMovement.scale(trackPosMotionInverted ? -distanceToCenter : distanceToCenter));
 		// Move new pos along track alignment
 		newPosition = newPosition.add(trackMovement.scale(trackMotionInverted ? -motionWrapped.length() : motionWrapped.length()));
-		return new PathingContext(newPosition, 0d)
-					.with(PathingContext.DELTA_MOVEMENT, currentPositionWrapped.distanceTo(newPosition));
+		return new WheelData(newPosition, 0d).fromPrev(inputData);
 	}
 
 	public static boolean isRail(World world, BlockPos pos) {

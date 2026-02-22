@@ -16,6 +16,7 @@ public final class PathingData {
 
     //We have next found pos and roll by default
     public final Vec3 position;
+    //Clockwise is positive when facing the direction of motion.
     public final double roll;
     private final Map<Key<?>, Object> extension;
     //And some common fields

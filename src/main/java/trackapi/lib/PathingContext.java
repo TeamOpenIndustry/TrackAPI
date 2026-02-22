@@ -13,41 +13,42 @@ import java.util.concurrent.ConcurrentHashMap;
  * Users could define associated data to pass from track to stock
  */
 public final class PathingContext {
-    private final Map<TrackData<?>, Object> dataMap;
 
-    //We have next found pos by default
-    public final Vec3 pos;
-    //And some built-in fields that are filled in
+    //We have next found pos and roll by default
+    public final Vec3 nextPos;
+    public final double roll;
+    private final Map<TrackData<?>, Object> extension;
+    //And some common fields
     //Moved distance between current pos and next pos
-    public static final TrackData<Vec3> PREV_POS = createOrGetKey("prevPos", Vec3.class);
     public static final TrackData<Double> DELTA_MOVEMENT = createOrGetKey("deltaMovement", Double.class);
-    public static final TrackData<Double> GAUGE = createOrGetKey("gauge", Double.class);
-    //And we expect you to fill in these
-    //Track roll for stocks to do superelevation (rotated from middle of the rails)
-    public static final TrackData<Double> ROLL_DEGREES = createOrGetKey("rollDegrees", Double.class);
 
     //Wrapper for vanilla Vec3d
-    public PathingContext(Vec3d pos) {
-        this(new Vec3(pos));
+    public PathingContext(Vec3d nextPos, double roll) {
+        this(new Vec3(nextPos), roll);
     }
 
-    public PathingContext(Vec3 pos) {
-        this.pos = Objects.requireNonNull(pos, "pos cannot be null");
-        this.dataMap = new IdentityHashMap<>();
+    public PathingContext(Vec3 nextPos, double roll) {
+        this.nextPos = Objects.requireNonNull(nextPos, "nextPos cannot be null");
+        this.roll = roll;
+        this.extension = new IdentityHashMap<>();
     }
 
     public <T> PathingContext with(TrackData<T> key, T value) {
         key.validate(value);
-        dataMap.put(key, value);
+        extension.put(key, value);
         return this;
     }
 
     public <T> T get(TrackData<T> key) {
-        return key.type().cast(dataMap.get(key));
+        return key.type().cast(extension.get(key));
     }
 
-    public void reset(TrackData<?> key) {
-        dataMap.remove(key);
+    public void remove(TrackData<?> key) {
+        extension.remove(key);
+    }
+
+    public boolean containsKey(TrackData<?> key) {
+        return extension.containsKey(key);
     }
 
     @SuppressWarnings("unchecked")

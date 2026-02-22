@@ -58,6 +58,16 @@ public class Vec3 {
         return Math.sqrt((x - other.x) * (x - other.x) + (y - other.y) * (y - other.y) + (z - other.z) * (z - other.z));
     }
 
+    public double x() {
+        return x;
+    }
+    public double y() {
+        return y;
+    }
+    public double z() {
+        return z;
+    }
+
     public Vec3d toVanilla() {
         return new Vec3d(this.x, this.y, this.z);
     }

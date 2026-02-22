@@ -16,17 +16,18 @@ public class Util {
 	 * @return Potential ITrack, or null if failed to find a valid one
 	 */
 
-	public static <T extends ITrack> T findTrackBlocks(World world, Vec3d pos, boolean acceptMinecraftRails, Class<T> type) {
-		T track = getInternalTileEntity(world, pos, acceptMinecraftRails, type);
+	public static <T extends ITrack> T findTrackBlocks(World world, Vec3 pos, boolean acceptMinecraftRails, Class<T> type) {
+		Vec3d vanilla = pos.toVanilla();
+		T track = getInternalTileEntity(world, vanilla, acceptMinecraftRails, type);
 		if (track != null) {
 			return track;
 		}
 		// Allow a bit of vertical fuzziness
-		track = getInternalTileEntity(world, pos.add(0, 0.4, 0), acceptMinecraftRails, type);
+		track = getInternalTileEntity(world, vanilla.add(0, 0.4, 0), acceptMinecraftRails, type);
 		if (track != null) {
 			return track;
 		}
-		track = getInternalTileEntity(world, pos.add(0, -0.4, 0), acceptMinecraftRails, type);
+		track = getInternalTileEntity(world, vanilla.add(0, -0.4, 0), acceptMinecraftRails, type);
 		if (track != null) {
 			return track;
 		}
@@ -36,7 +37,7 @@ public class Util {
 	//Compatibility
 	@Deprecated
 	public static ITrack getTileEntity(World world, Vec3d pos, boolean acceptMinecraftRails) {
-		return findTrackBlocks(world, pos, acceptMinecraftRails, ITrack.class);
+		return findTrackBlocks(world, new Vec3(pos), acceptMinecraftRails, ITrack.class);
 	}
 
 	private static <T extends ITrack> T getInternalTileEntity(final World world, Vec3d pos, boolean acceptMinecraftRails, Class<T> type) {

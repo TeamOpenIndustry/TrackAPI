@@ -64,7 +64,7 @@ public class MinecraftRail implements ITrackV2 {
 	}
 
 	@Override
-	public WheelData getNextPosition(WheelData inputData, Vec3 motion, double gauge) {
+	public PathingData getNextPosition(PathingData inputData, Vec3 motion, double gauge) {
 		Vec3d currentPositionWrapped = inputData.position.toVanilla();
 		Vec3d motionWrapped = motion.toVanilla();
 
@@ -85,7 +85,7 @@ public class MinecraftRail implements ITrackV2 {
 		newPosition = newPosition.add(trackMovement.scale(trackPosMotionInverted ? -distanceToCenter : distanceToCenter));
 		// Move new pos along track alignment
 		newPosition = newPosition.add(trackMovement.scale(trackMotionInverted ? -motionWrapped.length() : motionWrapped.length()));
-		return new WheelData(newPosition, 0d).fromPrev(inputData);
+		return new PathingData(newPosition, 0d).fromPrev(inputData);
 	}
 
 	public static boolean isRail(World world, BlockPos pos) {

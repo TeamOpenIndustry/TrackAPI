@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * <p>
  * Users could define associated data to pass from track to stock
  */
-public final class WheelData {
+public final class PathingData {
 
     //We have next found pos and roll by default
     public final Vec3 position;
@@ -24,17 +24,17 @@ public final class WheelData {
     public static final Key<Double> DELTA_ROLL = createOrGetKey("deltaRoll", Double.class);
 
     //Wrapper for vanilla Vec3d
-    public WheelData(Vec3d position, double roll) {
+    public PathingData(Vec3d position, double roll) {
         this(new Vec3(position), roll);
     }
 
-    public WheelData(Vec3 position, double roll) {
+    public PathingData(Vec3 position, double roll) {
         this.position = Objects.requireNonNull(position, "position cannot be null");
         this.roll = roll;
         this.extension = new IdentityHashMap<>();
     }
 
-    public <T> WheelData with(Key<T> key, T value) {
+    public <T> PathingData with(Key<T> key, T value) {
         key.validate(value);
         extension.put(key, value);
         return this;
@@ -52,7 +52,7 @@ public final class WheelData {
         return extension.containsKey(key);
     }
 
-    public WheelData fromPrev(WheelData inputData) {
+    public PathingData fromPrev(PathingData inputData) {
         return this.with(DELTA_MOVEMENT, position.distanceTo(inputData.position))
                    .with(DELTA_ROLL, roll - inputData.roll);
     }
@@ -72,7 +72,7 @@ public final class WheelData {
     }
 
     /**
-     * Typed key for WheelData's data storage
+     * Typed key for PathingData's data storage
      * <p>
      * Please note this is only used in <code>IdentityHashMap</code>, and should not be used externally
      * @param <T> type of the value

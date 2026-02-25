@@ -7,20 +7,20 @@ import net.minecraft.util.math.Vec3d;
  */
 public class PathingData {
     //Reserve position/pos name for mods that may not use MC's Vec3d
-    private Vec3d vanillaPosition;
+    private Vec3d vanillaPos;
     private double roll;
 
-    public PathingData(Vec3d vanillaPosition, double roll) {
-        this.vanillaPosition = vanillaPosition;
+    public PathingData(Vec3d vanillaPos, double roll) {
+        this.vanillaPos = vanillaPos;
         this.roll = roll;
     }
 
     public Vec3d getVanillaPos() {
-        return vanillaPosition;
+        return vanillaPos;
     }
 
-    public PathingData setVanillaPosition(Vec3d vanillaPosition) {
-        this.vanillaPosition = vanillaPosition;
+    public PathingData setVanillaPos(Vec3d vanillaPos) {
+        this.vanillaPos = vanillaPos;
         return this;
     }
 

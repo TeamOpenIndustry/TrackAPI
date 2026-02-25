@@ -88,7 +88,7 @@ public class MinecraftRail implements ITrackV2 {
 		if (Math.abs(factor) > 1E-4) {
 			//If it's significantly enough, update it
 			newPosition = newPosition.add(trackMovement.scale(factor));
-			inputData.setVanillaPosition(newPosition).setRoll(0d);
+			inputData.setVanillaPos(newPosition).setRoll(0d);
 			return true;
 		}
 		return false;

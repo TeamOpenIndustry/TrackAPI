@@ -80,12 +80,18 @@ public class MinecraftRail implements ITrackV2 {
 		boolean trackMotionInverted = motion.distanceTo(trackMovement) > motion.scale(-1).distanceTo(trackMovement);
 
 		Vec3d newPosition = pos;
-		//Correct new pos to track alignment
-		newPosition = newPosition.add(trackMovement.scale(trackPosMotionInverted ? -distanceToCenter : distanceToCenter));
-		// Move new pos along track alignment
-		newPosition = newPosition.add(trackMovement.scale(trackMotionInverted ? -motion.length() : motion.length()));
-		inputData.setVanillaPosition(newPosition).setRoll(0d);
-		return newPosition.squareDistanceTo(currentPosition) > 1E-8;
+		double factor =
+				//Correct new pos to track alignment
+				(trackPosMotionInverted ? -distanceToCenter : distanceToCenter)
+				// Move new pos along track alignment
+				+ (trackMotionInverted ? -motion.length() : motion.length());
+		if (Math.abs(factor) > 1E-4) {
+			//If it's significantly enough, update it
+			newPosition = newPosition.add(trackMovement.scale(factor));
+			inputData.setVanillaPosition(newPosition).setRoll(0d);
+			return true;
+		}
+		return false;
 	}
 
 	public static boolean isRail(World world, BlockPos pos) {

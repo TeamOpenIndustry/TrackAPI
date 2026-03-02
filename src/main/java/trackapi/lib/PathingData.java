@@ -6,21 +6,20 @@ import net.minecraft.util.math.Vec3d;
  * Mutable data storaging object used by stocks to query data
  */
 public class PathingData {
-    //Reserve position/pos name for mods that may not use MC's Vec3d
-    private Vec3d vanillaPos;
+    private Vec3d pos;
     private double roll;
 
-    public PathingData(Vec3d vanillaPos, double roll) {
-        this.vanillaPos = vanillaPos;
+    public PathingData(Vec3d pos, double roll) {
+        this.pos = pos;
         this.roll = roll;
     }
 
-    public Vec3d getVanillaPos() {
-        return vanillaPos;
+    public Vec3d getPos() {
+        return pos;
     }
 
-    public PathingData setVanillaPos(Vec3d vanillaPos) {
-        this.vanillaPos = vanillaPos;
+    public PathingData setPos(Vec3d pos) {
+        this.pos = pos;
         return this;
     }
 

@@ -33,7 +33,7 @@ public interface ITrackV2 extends ITrack {
         //Create another PathingData impl may confuse user and that action is discouraged, so don't process V1 logic in V2
         PathingData data = new PathingData(currentPosition, 0d);
         if (getNextPosition(data, motion, getTrackGauge())) {
-            return data.getVanillaPos();
+            return data.getPos();
         }
         return currentPosition;
     }

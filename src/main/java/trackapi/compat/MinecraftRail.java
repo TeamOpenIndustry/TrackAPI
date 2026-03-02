@@ -65,7 +65,7 @@ public class MinecraftRail implements ITrackV2 {
 
 	@Override
 	public boolean getNextPosition(PathingData inputData, Vec3d motion, double gauge) {
-		Vec3d currentPosition = inputData.getVanillaPos();
+		Vec3d currentPosition = inputData.getPos();
 
         Vec3d trackMovement = vectors.get(direction);
 		Vec3d trackCenter = centers.get(direction);
@@ -88,7 +88,7 @@ public class MinecraftRail implements ITrackV2 {
 		if (Math.abs(factor) > 1E-4) {
 			//If it's significantly enough, update it
 			newPosition = newPosition.add(trackMovement.scale(factor));
-			inputData.setVanillaPos(newPosition).setRoll(0d);
+			inputData.setPos(newPosition).setRoll(0d);
 			return true;
 		}
 		return false;

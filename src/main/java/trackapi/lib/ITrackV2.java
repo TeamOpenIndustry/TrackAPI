@@ -29,6 +29,8 @@ public interface ITrackV2 extends ITrack {
     @Override
     @Deprecated
     default Vec3d getNextPosition(Vec3d currentPosition, Vec3d motion) {
-        return new PathingData(currentPosition, 0d).getPos();
+        PathingData data = new PathingData(currentPosition, 0d);
+        getNextPosition(data, motion, getTrackGauge());
+        return data.getPos();
     }
 }

@@ -6,15 +6,17 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import trackapi.lib.Gauges;
-import trackapi.lib.ITrack;
+import trackapi.lib.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class MinecraftRail implements ITrack {
-	private static Map<EnumRailDirection, Vec3d> vectors = new HashMap<>();
-	private static Map<EnumRailDirection, Vec3d> centers = new HashMap<>();
+/**
+ * Wrapper for vanilla rail
+ */
+public class MinecraftRail implements ITrackV2 {
+	private static final Map<EnumRailDirection, Vec3d> vectors = new HashMap<>();
+	private static final Map<EnumRailDirection, Vec3d> centers = new HashMap<>();
 	static {
 		Vec3d north = new Vec3d(0, 0, 1);
 		Vec3d south = new Vec3d(0, 0, -1);
@@ -46,8 +48,8 @@ public class MinecraftRail implements ITrack {
 	}
 
 
-	private EnumRailDirection direction;
-	private BlockPos pos;
+	private final EnumRailDirection direction;
+	private final BlockPos pos;
 
 	public MinecraftRail(World world, BlockPos pos) {
 		this.pos = pos;
@@ -57,33 +59,37 @@ public class MinecraftRail implements ITrack {
 	}
 
 	@Override
-	public double getTrackGauge() {
-		return Gauges.MINECRAFT;
+	public double[] getTrackGauges() {
+		return new double[]{Gauges.MINECRAFT};
 	}
 
 	@Override
-	public Vec3d getNextPosition(Vec3d currentPosition, Vec3d motion) {
-		Vec3d trackMovement = vectors.get(direction);
+	public<D extends PathingData> void getNextPosition(D inputData, Vec3d motion, double gauge) {
+		Vec3d currentPosition = inputData.getPos();
+
+        Vec3d trackMovement = vectors.get(direction);
 		Vec3d trackCenter = centers.get(direction);
 
-		Vec3d posRelativeToCenter = currentPosition.subtractReverse(new Vec3d(pos).add(trackCenter));
-		double distanceToCenter = posRelativeToCenter.lengthVector();
+		Vec3d pos = new Vec3d(this.pos).add(trackCenter);
+		Vec3d posRelativeToCenter = currentPosition.subtractReverse(pos);
+		double distanceToCenter = posRelativeToCenter.length();
 
 		// Determine if trackMovement should be positive or negative as relative to block center
 		boolean trackPosMotionInverted = posRelativeToCenter.distanceTo(trackMovement) < posRelativeToCenter.scale(-1).distanceTo(trackMovement);
 
 		boolean trackMotionInverted = motion.distanceTo(trackMovement) > motion.scale(-1).distanceTo(trackMovement);
 
-		Vec3d newPosition = new Vec3d(pos).add(trackCenter);
-		//Correct new pos to track alignment
-		newPosition = newPosition.add(trackMovement.scale(trackPosMotionInverted ? -distanceToCenter : distanceToCenter));
-		// Move new pos along track alignment
-		newPosition = newPosition.add(trackMovement.scale(trackMotionInverted ? -motion.lengthVector() : motion.lengthVector()));
-		return newPosition;
+		Vec3d newPosition = pos;
+		double factor =
+				//Correct new pos to track alignment
+				(trackPosMotionInverted ? -distanceToCenter : distanceToCenter)
+				//And Move new pos along track alignment
+				+ (trackMotionInverted ? -motion.length() : motion.length());
+		newPosition = newPosition.add(trackMovement.scale(factor));
+		inputData.setPos(newPosition).setRoll(0d);
 	}
 
 	public static boolean isRail(World world, BlockPos pos) {
 		return BlockRailBase.isRailBlock(world, pos);
 	}
-	
 }

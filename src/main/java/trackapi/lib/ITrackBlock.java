@@ -6,7 +6,7 @@ import net.minecraft.world.World;
 
 /**
  * Compatibility layer between <code>ITrack</code> and blocks which only contain tracks
- * @deprecated use <code>ITrackV2</code> instead
+ * @deprecated Use <code>ITrackV2</code> instead for forward compatibility, instances of this class will only be returned when querying <code>ITrack</code>
  */
 @Deprecated
 public interface ITrackBlock {

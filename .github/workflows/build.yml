@@ -14,6 +14,11 @@ jobs:
               env:
                 github_ref: ${{ github.ref }}
                 ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+            - name: Set up JDK
+              uses: actions/setup-java@v5
+              with:
+                java-version: '8'
+                distribution: 'temurin'
             - name: keyscan
               run: mkdir -p ~/.ssh/ && ssh-keyscan -t rsa teamopenindustry.cc >> ~/.ssh/known_hosts
             - name: secrets

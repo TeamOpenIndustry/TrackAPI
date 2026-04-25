@@ -7,16 +7,16 @@ public interface ITrack {
 	/**
 	 * The distance between the rails measured in meters
 	 * 
-	 * @see Gauges#STANDARD
-	 * @see Gauges#MINECRAFT
+	 * @see Gauges
 	 */
-	public double getTrackGauge();
+	double getTrackGauge();
 	
 	/**
-	 * Used by rolling stock to look up their next position.
+	 * Used by rolling stocks to look up their next position.
 	 * 
-	 * @param currentPosition - Current entity or bogey position
-	 * @param motion - Motion over the last tick (velocity)
+	 * @param currentPosition Current position of entity or bogey
+	 * @param motion Current velocity of entity or bogey
+	 * @return Next found position on the track
 	 */
-	public Vec3 getNextPosition(Vec3 currentPosition, Vec3 motion);
+	Vec3 getNextPosition(Vec3 currentPosition, Vec3 motion);
 }

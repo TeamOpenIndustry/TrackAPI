@@ -1,24 +1,25 @@
 package trackapi.lib;
 
-import net.minecraft.util.math.Vec3d;
+
+import net.minecraft.util.Vec3;
 
 /**
  * Mutable data storaging object used by stocks to query data
  */
 public class PathingData {
-    private Vec3d pos;
+    private Vec3 pos;
     private double roll;
 
-    public PathingData(Vec3d pos, double roll) {
+    public PathingData(Vec3 pos, double roll) {
         this.pos = pos;
         this.roll = roll;
     }
 
-    public Vec3d getPos() {
+    public Vec3 getPos() {
         return pos;
     }
 
-    public PathingData setPos(Vec3d pos) {
+    public PathingData setPos(Vec3 pos) {
         this.pos = pos;
         return this;
     }

@@ -100,14 +100,14 @@ public class MinecraftRail implements ITrackV2 {
         Vec3 trackMovement = vectors.get(direction);
 		Vec3 trackCenter = centers.get(direction);
 
-		Vec3 pos = new Vec3(this.pos).add(trackCenter);
-		Vec3 posRelativeToCenter = subtractReverse(currentPosition, add(Vec3.createVectorHelper(posX, posY, posZ), trackCenter));
+		Vec3 pos = add(Vec3.createVectorHelper(posX, posY, posZ), trackCenter);
+		Vec3 posRelativeToCenter = subtractReverse(currentPosition, pos);
 		double distanceToCenter = posRelativeToCenter.lengthVector();
 
 		// Determine if trackMovement should be positive or negative as relative to block center
-		boolean trackPosMotionInverted = posRelativeToCenter.distanceTo(trackMovement) < posRelativeToCenter.scale(-1).distanceTo(trackMovement);
+		boolean trackPosMotionInverted = posRelativeToCenter.distanceTo(trackMovement) < scale(posRelativeToCenter, -1).distanceTo(trackMovement);
 
-		boolean trackMotionInverted = motion.distanceTo(trackMovement) > motion.scale(-1).distanceTo(trackMovement);
+		boolean trackMotionInverted = motion.distanceTo(trackMovement) > scale(motion, -1).distanceTo(trackMovement);
 
 		Vec3 newPosition = pos;
 		double factor =
@@ -115,7 +115,7 @@ public class MinecraftRail implements ITrackV2 {
 				(trackPosMotionInverted ? -distanceToCenter : distanceToCenter)
 				//And Move new pos along track alignment
 				+ (trackMotionInverted ? -motion.lengthVector() : motion.lengthVector());
-		newPosition = newPosition.add(trackMovement.scale(factor));
+		newPosition = add(newPosition, scale(trackMovement, factor));
 		inputData.setPos(newPosition).setRoll(0d);
 	}
 

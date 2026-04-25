@@ -3,12 +3,14 @@ import cam72cam.universalmodcore.Util;
 buildscript {
     repositories {
         mavenCentral()
-        maven { url = "http://maven.minecraftforge.net/" }
+        maven { url = "https://maven.minecraftforge.net/" }
         maven { url = "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url = "https://teamopenindustry.cc/maven" }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+        classpath ('com.anatawa12.forge:ForgeGradle:1.2-1.0.+') {
+            changing = true
+        }
         classpath 'cam72cam.universalmodcore:UniversalModCoreGradle:0.1.3'
     }
 }

@@ -16,7 +16,7 @@ public class Util {
 	 * @return Potential ITrack, or null if failed to find a valid one
 	 */
 
-	public static <T extends ITrack> T findTrackBlocks(World world, Vec3d pos, boolean acceptMinecraftRails, Class<T> type) {
+	public static <T extends ITrack> T findTrackBlocks(World world, Vec3 pos, boolean acceptMinecraftRails, Class<T> type) {
         T track = getInternalTileEntity(world, pos, acceptMinecraftRails, type);
 		if (track != null) {
 			return track;
@@ -35,11 +35,11 @@ public class Util {
 
 	//Compatibility
 	@Deprecated
-	public static ITrack getTileEntity(World world, Vec3d pos, boolean acceptMinecraftRails) {
+	public static ITrack getTileEntity(World world, Vec3 pos, boolean acceptMinecraftRails) {
 		return findTrackBlocks(world, pos, acceptMinecraftRails, ITrack.class);
 	}
 
-	private static <T extends ITrack> T getInternalTileEntity(final World world, Vec3d pos, boolean acceptMinecraftRails, Class<T> type) {
+	private static <T extends ITrack> T getInternalTileEntity(final World world, Vec3 pos, boolean acceptMinecraftRails, Class<T> type) {
 		int posX = (int) Math.floor(pos.xCoord);
 		int posY = (int) Math.floor(pos.yCoord);
 		int posZ = (int) Math.floor(pos.zCoord);
@@ -67,23 +67,6 @@ public class Util {
 		}
 		if (acceptMinecraftRails && type.isAssignableFrom(MinecraftRail.class) && MinecraftRail.isRail(world, posX, posY, posZ)) {
 			return type.cast(new MinecraftRail(world, posX, posY, posZ));
-		}
-		return null;
-	}
-	
-	public static ITrack getTileEntity(World world, Vec3 pos, boolean acceptMinecraftRails) {
-		ITrack track = getInternalTileEntity(world, pos, acceptMinecraftRails);
-		if (track != null) {
-			return track;
-		}
-		// Allow a bit of vertical fuzziness
-		track = getInternalTileEntity(world, pos.addVector(0, 0.4, 0), acceptMinecraftRails);
-		if (track != null) {
-			return track;
-		}
-		track = getInternalTileEntity(world, pos.addVector(0, -0.4, 0), acceptMinecraftRails);
-		if (track != null) {
-			return track;
 		}
 		return null;
 	}

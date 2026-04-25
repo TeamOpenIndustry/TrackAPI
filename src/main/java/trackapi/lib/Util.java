@@ -23,11 +23,11 @@ public class Util {
 			return track;
 		}
 		// Allow a bit of vertical fuzziness
-		track = getInternalTileEntity(world, pos.add(0, 0.4, 0), acceptMinecraftRails, type);
+		track = getInternalTileEntity(world, pos.addVector(0, 0.4, 0), acceptMinecraftRails, type);
 		if (track != null) {
 			return track;
 		}
-		track = getInternalTileEntity(world, pos.add(0, -0.4, 0), acceptMinecraftRails, type);
+		track = getInternalTileEntity(world, pos.addVector(0, -0.4, 0), acceptMinecraftRails, type);
 		if (track != null) {
 			return track;
 		}

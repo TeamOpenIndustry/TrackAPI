@@ -18,5 +18,5 @@ public interface ITrack {
 	 * @param motion Current velocity of entity or bogey
 	 * @return Next found position on the track
 	 */
-	public Vector3d getNextPosition(Vector3d currentPosition, Vector3d motion);
+	Vector3d getNextPosition(Vector3d currentPosition, Vector3d motion);
 }

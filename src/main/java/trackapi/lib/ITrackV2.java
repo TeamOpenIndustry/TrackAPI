@@ -1,6 +1,7 @@
 package trackapi.lib;
 
-import net.minecraft.util.math.Vec3d;
+
+import net.minecraft.util.math.vector.Vector3d;
 
 public interface ITrackV2 extends ITrack {
 
@@ -17,7 +18,7 @@ public interface ITrackV2 extends ITrack {
      * @param motion Current velocity of entity or bogey
      * @param gauge Gauge of the pathing stock
      */
-     <D extends PathingData> void getNextPosition(D inputData, Vec3d motion, double gauge);
+     <D extends PathingData> void getNextPosition(D inputData, Vector3d motion, double gauge);
 
     //Overrides for forward compatibility, don't use
     @Override
@@ -28,7 +29,7 @@ public interface ITrackV2 extends ITrack {
 
     @Override
     @Deprecated
-    default Vec3d getNextPosition(Vec3d currentPosition, Vec3d motion) {
+    default Vector3d getNextPosition(Vector3d currentPosition, Vector3d motion) {
         PathingData data = new PathingData(currentPosition, 0d);
         getNextPosition(data, motion, getTrackGauge());
         return data.getPos();

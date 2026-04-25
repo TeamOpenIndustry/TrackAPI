@@ -71,7 +71,7 @@ public class MinecraftRail implements ITrackV2 {
         Vector3d trackMovement = vectors.get(direction);
 		Vector3d trackCenter = centers.get(direction);
 
-		Vector3d pos = new Vector3d(this.pos.).add(trackCenter);
+		Vector3d pos = Vector3d.atLowerCornerOf(this.pos).add(trackCenter);
 		Vector3d posRelativeToCenter = currentPosition.subtract(pos);
 		double distanceToCenter = posRelativeToCenter.length();
 

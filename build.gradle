@@ -1,31 +1,33 @@
-import cam72cam.universalmodcore.Util;
-
 buildscript {
     repositories {
+        maven { url = "https://maven.minecraftforge.net/" }
+        maven { url "https://plugins.gradle.org/" }
         mavenCentral()
-        maven { url = "http://maven.minecraftforge.net/" }
-        maven { url = "https://teamopenindustry.cc/maven" }
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
-        classpath 'cam72cam.universalmodcore:UniversalModCoreGradle:0.1.3'
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.69', changing: true
     }
 }
-apply plugin: 'net.minecraftforge.gradle'
-// Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
-apply plugin: 'eclipse'
-apply plugin: 'maven'
-apply plugin: 'maven-publish'
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'eclipse'
+apply plugin: 'maven-publish'
 
 String baseVersion = "1.3"
 if (!"release".equalsIgnoreCase(System.getProperty("target"))) {
-    baseVersion += "-" + Util.GitRevision()
+    try {
+        baseVersion += "-" + 'git rev-parse --verify --short=7 HEAD'.execute().text.trim()
+    } catch (Exception ex) {
+        baseVersion += "-unknown"
+    }
 }
 version = "1.15.2-forge-" + baseVersion
 group = "trackapi" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "TrackAPI"
+
+java {
+    withSourcesJar()
+}
 
 minecraft {
     // The mappings can be changed at any time, and must be in the following format.
@@ -51,7 +53,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                examplemod {
+                trackapi {
                     source sourceSets.main
                 }
             }
@@ -67,7 +69,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                examplemod {
+                trackapi {
                     source sourceSets.main
                 }
             }
@@ -76,16 +78,13 @@ minecraft {
         data {
             workingDirectory project.file('run')
 
-            // Recommended logging data for a userdev environment
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-
-            // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
 
-            args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/')
+            args '--mod', 'trackapi', '--all', '--output', file('src/generated/resources/')
 
             mods {
-                examplemod {
+                trackapi {
                     source sourceSets.main
                 }
             }
@@ -94,83 +93,37 @@ minecraft {
 }
 
 dependencies {
-    // Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
-    // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
-    // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft 'net.minecraftforge:forge:1.15.2-31.1.0'
-
-    // You may put jars on which you depend on in ./libs or you may define them like so..
-    // compile "some.group:artifact:version:classifier"
-    // compile "some.group:artifact:version"
-
-    // Real examples
-    // compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
-    // compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
-
-    // The 'provided' configuration is for optional dependencies that exist at compile-time but might not at runtime.
-    // provided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-
-    // These dependencies get remapped to your current MCP mappings
-    // deobf 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-
-    // For more info...
-    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
-    // http://www.gradle.org/docs/current/userguide/dependency_management.html
-
+    implementation "org.apache.maven.wagon:wagon-ssh:3.5.3"
 }
 
-// Example for how to get properties into the manifest for reading by the runtime..
-jar {
-    manifest {
-        attributes([
-            "Specification-Title": "TrackAPI",
-            "Specification-Version": "1", // We are version 1 of ourselves
-            "Implementation-Title": project.name,
-            "Implementation-Version": "${version}",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-        ])
-    }
-}
+jar.finalizedBy('reobfJar')
 
-// Example configuration to allow publishing using the maven-publish task
-// we define a custom artifact that is sourced from the reobfJar output task
-// and then declare that to be published
-// Note you'll need to add a repository here
-def reobfFile = file("$buildDir/reobfJar/output.jar")
-def reobfArtifact = artifacts.add('default', reobfFile) {
-    type 'jar'
-    builtBy 'reobfJar'
-}
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            artifact reobfArtifact
+            artifact jar
+            artifact sourcesJar
+            artifactId archivesBaseName
         }
     }
     repositories {
         maven {
-            url "file:///${project.projectDir}/mcmodsrepo"
+            url "sftp://teamopenindustry.cc:22/var/www/html/maven/"
+            credentials {
+                username = "mavenci"
+                password = System.getenv("MAVENCI_PASS")
+            }
         }
     }
 }
 
-task deployJar(type: Jar)
-
-configurations {
-    deployerJars
-}
-
-dependencies {
-    deployerJars "org.apache.maven.wagon:wagon-ssh:2.9"
-}
-
-uploadArchives {
-    tasks.uploadArchives.dependsOn build
-    repositories.mavenDeployer {
-        configuration = configurations.deployerJars
-        repository(url: "scp://teamopenindustry.cc/var/www/html/maven/") {
-            authentication(userName: "mavenci", privateKey: "publish_key")
-        }
+task ('showBuildInfo') {
+    doLast {
+        System.out.println("Build Uploaded to Maven at: ")
+        System.out.println("https://teamopenindustry.cc/maven/trackapi/TrackAPI/${version}/TrackAPI-${version}.jar")
     }
 }
+
+publish.finalizedBy showBuildInfo
 

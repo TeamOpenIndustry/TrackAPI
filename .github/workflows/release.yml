@@ -27,7 +27,7 @@ jobs:
             java-version: '16'
           - branch: 'forge_1.18.2'
             java-version: '17'
-          - branch: 'forge_1.19.2'
+          - branch: 'forge_1.19.4'
             java-version: '17'
           - branch: 'forge_1.20.1'
             java-version: '17'

@@ -2,17 +2,24 @@ package trackapi.compat;
 
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.vehicle.Minecart;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseRailBlock;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.RailShape;
 import trackapi.lib.Gauges;
-import trackapi.lib.ITrack;
+import trackapi.lib.ITrackV2;
+import trackapi.lib.PathingData;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class MinecraftRail implements ITrack {
+/**
+ * Wrapper for vanilla rail
+ */
+public class MinecraftRail implements ITrackV2 {
 	private static Map<RailShape, Vec3> vectors = new HashMap<>();
 	private static Map<RailShape, Vec3> centers = new HashMap<>();
 	static {
@@ -46,8 +53,8 @@ public class MinecraftRail implements ITrack {
 	}
 
 
-	private RailShape direction;
-	private BlockPos pos;
+	private final RailShape direction;
+	private final BlockPos pos;
 
 	public MinecraftRail(Level world, BlockPos pos) {
 		this.pos = pos;
@@ -57,16 +64,19 @@ public class MinecraftRail implements ITrack {
 	}
 
 	@Override
-	public double getTrackGauge() {
-		return Gauges.MINECRAFT;
+	public double[] getTrackGauges() {
+		return new double[]{Gauges.MINECRAFT};
 	}
 
 	@Override
-	public Vec3 getNextPosition(Vec3 currentPosition, Vec3 motion) {
-		Vec3 trackMovement = vectors.get(direction);
+	public<D extends PathingData> void getNextPosition(D inputData, Vec3 motion, double gauge) {
+		Vec3 currentPosition = inputData.getPos();
+
+        Vec3 trackMovement = vectors.get(direction);
 		Vec3 trackCenter = centers.get(direction);
 
-		Vec3 posRelativeToCenter = currentPosition.vectorTo(Vec3.atLowerCornerOf(pos).add(trackCenter));
+		Vec3 pos = Vec3.atLowerCornerOf(this.pos).add(trackCenter);
+		Vec3 posRelativeToCenter = currentPosition.subtract(pos);
 		double distanceToCenter = posRelativeToCenter.length();
 
 		// Determine if trackMovement should be positive or negative as relative to block center
@@ -74,16 +84,17 @@ public class MinecraftRail implements ITrack {
 
 		boolean trackMotionInverted = motion.distanceTo(trackMovement) > motion.scale(-1).distanceTo(trackMovement);
 
-		Vec3 newPosition = Vec3.atLowerCornerOf(pos).add(trackCenter);
-		//Correct new pos to track alignment
-		newPosition = newPosition.add(trackMovement.scale(trackPosMotionInverted ? -distanceToCenter : distanceToCenter));
-		// Move new pos along track alignment
-		newPosition = newPosition.add(trackMovement.scale(trackMotionInverted ? -motion.length() : motion.length()));
-		return newPosition;
+		Vec3 newPosition = pos;
+		double factor =
+				//Correct new pos to track alignment
+				(trackPosMotionInverted ? -distanceToCenter : distanceToCenter)
+				//And Move new pos along track alignment
+				+ (trackMotionInverted ? -motion.length() : motion.length());
+		newPosition = newPosition.add(trackMovement.scale(factor));
+		inputData.setPos(newPosition).setRoll(0d);
 	}
 
 	public static boolean isRail(Level world, BlockPos pos) {
 		return BaseRailBlock.isRail(world, pos);
 	}
-	
 }

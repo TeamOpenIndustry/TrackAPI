@@ -81,7 +81,7 @@ publishing {
 task ('showBuildInfo') {
     doLast {
         System.out.println("Build Uploaded to Maven at: ")
-        System.out.println("https://https://teamopenindustry.cc/maven/trackapi/TrackAPI/${version}/TrackAPI-${version}.jar")
+        System.out.println("https://teamopenindustry.cc/maven/trackapi/TrackAPI/${version}/TrackAPI-${version}.jar")
     }
 }
 

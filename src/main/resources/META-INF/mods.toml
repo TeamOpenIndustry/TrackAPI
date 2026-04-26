@@ -3,7 +3,7 @@ loaderVersion="[31,)"
 license="MIT"
 [[mods]]
 modId="trackapi" 
-version="1.2" 
+version="1.3"
 displayName="TrackAPI" 
 authors="cam72cam" 
 description='''A common track interface for minecraft forge'''

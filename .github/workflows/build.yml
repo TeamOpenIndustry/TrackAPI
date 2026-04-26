@@ -21,15 +21,11 @@ jobs:
                 distribution: 'temurin'
             - name: keyscan
               run: mkdir -p ~/.ssh/ && ssh-keyscan -t rsa teamopenindustry.cc >> ~/.ssh/known_hosts
-            - name: secrets
+            - name: Gradle publish
               env:
-                MAVENCI: ${{ secrets.MAVENCI }}
-              run: mkdir -p /home/runner/.gradle/daemon/6.9/ && echo "${MAVENCI}" >> /home/runner/.gradle/daemon/6.9/publish_key &&  echo "${MAVENCI}" >> publish_key
-            - name: Gradle uploadArchives
-              run: ./gradlew uploadArchives
-            - name: cleanup
-              run: rm /home/runner/.gradle/daemon/6.9/publish_key
+                MAVENCI_PASS: ${{ secrets.MAVENCI_PASS }}
+              run: ./gradlew publish
             - uses: actions/upload-artifact@v6
               with:
-                name: UniversalModCore-${{ env.ref }}
-                path: build/libs/UniversalModCore-*.jar
+                name: TrackAPI-${{ env.ref }}
+                path: build/libs/TrackAPI-*

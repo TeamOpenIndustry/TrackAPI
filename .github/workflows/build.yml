@@ -6,7 +6,7 @@ jobs:
     build:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@v5
             - run: |
                 ref=`echo ${github_ref} | sed -e 's,refs/heads/,,' | tr '/' '-'`
                 echo $ref
@@ -14,6 +14,11 @@ jobs:
               env:
                 github_ref: ${{ github.ref }}
                 ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+            - name: Set up JDK
+              uses: actions/setup-java@v5
+              with:
+                java-version: '16'
+                distribution: 'temurin'
             - name: keyscan
               run: mkdir -p ~/.ssh/ && ssh-keyscan -t rsa teamopenindustry.cc >> ~/.ssh/known_hosts
             - name: Gradle publish

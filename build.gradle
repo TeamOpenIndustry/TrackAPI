@@ -6,7 +6,7 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-        classpath group: 'net.neoforged.gradle', name: 'userdev', version: '7.1.11'
+        classpath group: 'net.neoforged.gradle', name: 'userdev', version: '7.1.25'
     }
 }
 
@@ -14,7 +14,7 @@ apply plugin: 'net.neoforged.gradle.userdev'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 
 String baseVersion = "1.3"
 if (!"release".equalsIgnoreCase(System.getProperty("target"))) {
@@ -24,14 +24,9 @@ if (!"release".equalsIgnoreCase(System.getProperty("target"))) {
         baseVersion += "-unknown"
     }
 }
-version = "1.21.8-neoforge-" + baseVersion
+version = "26.1-neoforge-" + baseVersion
 group = "trackapi" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "TrackAPI"
-
-configurations {
-    minecraftLibrary
-    implementation.extendsFrom minecraftLibrary
-}
 
 java {
     withSourcesJar()
@@ -51,10 +46,6 @@ runs {
         // You can set various levels here.
         // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
         systemProperty 'forge.logging.console.level', 'debug'
-
-        dependencies {
-            runtime project.configurations.minecraftLibrary
-        }
 
         modSource project.sourceSets.main
     }
@@ -88,8 +79,8 @@ runs {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
-    implementation 'net.neoforged:neoforge:21.8.52'
-    minecraftLibrary "org.apache.maven.wagon:wagon-ssh:3.5.3"
+    implementation 'net.neoforged:neoforge:26.1.2.29-beta'
+    implementation "org.apache.maven.wagon:wagon-ssh:3.5.3"
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..

@@ -25,3 +25,7 @@ jobs:
               env:
                 MAVENCI_PASS: ${{ secrets.MAVENCI_PASS }}
               run: ./gradlew publish
+            - uses: actions/upload-artifact@v6
+              with:
+                name: TrackAPI-${{ env.ref }}
+                path: build/libs/TrackAPI-*

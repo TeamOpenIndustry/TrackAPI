@@ -1,0 +1,73 @@
+name: TrackAPI Forge-like Release CI
+
+on: [workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - branch: 'forge_1.7.10'
+            java-version: '8'
+          - branch: 'forge_1.10.2'
+            java-version: '8'
+          - branch: 'forge_1.11.2'
+            java-version: '8'
+          - branch: 'forge_1.12.2'
+            java-version: '8'
+          - branch: 'forge_1.14.4'
+            java-version: '8'
+          - branch: 'forge_1.15.2'
+            java-version: '8'
+          - branch: 'forge_1.16.5'
+            java-version: '8'
+          - branch: 'forge_1.17.1'
+            java-version: '16'
+          - branch: 'forge_1.18.2'
+            java-version: '17'
+          - branch: 'forge_1.19.2'
+            java-version: '17'
+          - branch: 'forge_1.20.1'
+            java-version: '17'
+          - branch: 'neoforge_1.21.1'
+            java-version: '21'
+          - branch: 'neoforge_1.21.4'
+            java-version: '21'
+          - branch: 'neoforge_1.21.8'
+            java-version: '21'
+          - branch: 'neoforge_26.1.2'
+            java-version: '25'
+
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ matrix.branch }}
+
+      - name: Set branch env variable
+        run: |
+          ref=$(echo "${{ matrix.branch }}" | tr '/' '-')
+          echo "ref=$ref" >> $GITHUB_ENV
+
+      - name: Set up JDK
+        uses: actions/setup-java@v5
+        with:
+          java-version: ${{ matrix.java-version }}
+          distribution: 'temurin'
+
+      - name: Setup SSH keyscan
+        run: |
+          mkdir -p ~/.ssh/
+          ssh-keyscan -t rsa teamopenindustry.cc >> ~/.ssh/known_hosts
+
+      - name: Gradle publish
+        env:
+          MAVENCI_PASS: ${{ secrets.MAVENCI_PASS }}
+        run: ./gradlew publish -Dtarget=release
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: TrackAPI-${{ env.ref }}
+          path: build/libs/TrackAPI-*

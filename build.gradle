@@ -94,32 +94,16 @@ minecraft {
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.14.4-28.1.0'
-    compile "org.apache.maven.wagon:wagon-ssh:3.5.3"
+    implementation "org.apache.maven.wagon:wagon-ssh:3.5.3"
 }
 
 jar.finalizedBy('reobfJar')
-
-processResources {
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
-
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mods.toml'
-                
-        // replace version and mcversion
-        expand 'version':project.version, 'mcversion':project.minecraft.version
-    }
-        
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'mods.toml'
-    }
-}
 
 publishing {
     publications {
         mavenJava(MavenPublication) {
             artifact jar
-            artifact sourceJar
+            artifact sourcesJar
             artifactId archivesBaseName
         }
     }

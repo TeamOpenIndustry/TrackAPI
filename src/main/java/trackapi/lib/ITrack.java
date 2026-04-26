@@ -7,20 +7,16 @@ public interface ITrack {
 	/**
 	 * The distance between the rails measured in meters
 	 * 
-	 * @see Gauges#STANDARD
-	 * @see Gauges#MINECRAFT
+	 * @see Gauges
 	 */
-	public double getTrackGauge();
+	double getTrackGauge();
 	
 	/**
-	 * Used by rolling stock to look up their next position.
+	 * Used by rolling stocks to look up their next position.
 	 * 
-	 * @param rotationYaw - Current entity rotation in degrees
-	 * @param bogieYaw - Current bogey rotation in degrees (set to rotationYaw if unused)
-	 * @param distance - Distanced traveled in meters
-	 * @param currentPosition - Current entity or bogey position
-	 * @param motion
-	 * @return The new position of the entity or bogey
+	 * @param currentPosition Current position of entity or bogey
+	 * @param motion Current velocity of entity or bogey
+	 * @return Next found position on the track
 	 */
-	public Vec3 getNextPosition(Vec3 currentPosition, Vec3 motion);
+	Vec3 getNextPosition(Vec3 currentPosition, Vec3 motion);
 }

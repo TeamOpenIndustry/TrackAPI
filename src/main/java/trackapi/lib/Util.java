@@ -41,7 +41,7 @@ public class Util {
 	}
 
 	private static <T extends ITrack> T getInternalTileEntity(final Level world, Vec3 pos, boolean acceptMinecraftRails, Class<T> type) {
-		final BlockPos bp = new BlockPos(Math.floor(pos.x), Math.floor(pos.y), Math.floor(pos.z));
+		final BlockPos bp = new BlockPos((int) Math.floor(pos.x), (int) Math.floor(pos.y), (int) Math.floor(pos.z));
 		BlockState bs = world.getBlockState(bp);
 
 		if (bs.getBlock() instanceof ITrackBlock) {

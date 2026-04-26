@@ -22,8 +22,10 @@ jobs:
             - name: keyscan
               run: mkdir -p ~/.ssh/ && ssh-keyscan -t rsa teamopenindustry.cc >> ~/.ssh/known_hosts
             - name: Gradle publish
-              run: ./gradlew publish
               env:
-                MAVENCI_PASS: ${{ secrets.MAVENCI }}
-            - name: cleanup
-              run: rm publish_key
+                MAVENCI_PASS: ${{ secrets.MAVENCI_PASS }}
+              run: ./gradlew publish
+            - uses: actions/upload-artifact@v6
+              with:
+                name: TrackAPI-${{ env.ref }}
+                path: build/libs/TrackAPI-*

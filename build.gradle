@@ -24,7 +24,7 @@ if (!"release".equalsIgnoreCase(System.getProperty("target"))) {
         baseVersion += "-unknown"
     }
 }
-version = "26.1-neoforge-" + baseVersion
+version = "26.1.2-neoforge-" + baseVersion
 group = "trackapi" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "TrackAPI"
 

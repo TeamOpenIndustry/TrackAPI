@@ -26,7 +26,8 @@ if (!"release".equalsIgnoreCase(System.getProperty("target"))) {
 }
 version = "26.1.2-neoforge-" + baseVersion
 group = "trackapi" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "TrackAPI"
+String archivesBaseName = "TrackAPI"
+base.archivesName = archivesBaseName
 
 java {
     withSourcesJar()

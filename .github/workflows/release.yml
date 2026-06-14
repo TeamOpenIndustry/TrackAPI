@@ -31,6 +31,8 @@ jobs:
             java-version: '17'
           - branch: 'forge_1.20.1'
             java-version: '17'
+          - branch: 'forge_1.21.1'
+            java-version: '21'
           - branch: 'neoforge_1.21.1'
             java-version: '21'
           - branch: 'neoforge_1.21.4'

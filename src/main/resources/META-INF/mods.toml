@@ -1,0 +1,21 @@
+modLoader="javafml"
+loaderVersion="[52,)"
+license="MIT"
+[[mods]]
+modId="trackapi" 
+version="1.3"
+displayName="TrackAPI" 
+authors="cam72cam" 
+description='''A common track interface'''
+[[dependencies.trackapi]]
+modId="forge"
+mandatory=true
+versionRange="[52.1.14,)"
+ordering="NONE"
+side="BOTH"
+[[dependencies.trackapi]]
+modId="minecraft"
+mandatory=true
+versionRange="[1.21.1]"
+ordering="NONE"
+side="BOTH"

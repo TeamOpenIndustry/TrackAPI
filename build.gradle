@@ -1,18 +1,10 @@
-buildscript {
-    repositories {
-        maven { url "https://maven.neoforged.net/releases" }
-        maven { url "https://plugins.gradle.org/" }
-        mavenCentral()
-        gradlePluginPortal()
-    }
-    dependencies {
-        classpath group: 'net.neoforged.gradle', name: 'userdev', version: '7.1.11'
-    }
+plugins {
+    id 'java'
+    id 'idea'
+    id 'eclipse'
+    id 'maven-publish'
+    id 'net.minecraftforge.gradle' version '[7.0.23,8.0)'
 }
-
-apply plugin: 'net.neoforged.gradle.userdev'
-apply plugin: 'eclipse'
-apply plugin: 'maven-publish'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
@@ -24,72 +16,84 @@ if (!"release".equalsIgnoreCase(System.getProperty("target"))) {
         baseVersion += "-unknown"
     }
 }
-version = "1.21.1-neoforge-" + baseVersion
+version = "1.21.1-forge-" + baseVersion
 group = "trackapi" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "TrackAPI"
-
-configurations {
-    minecraftLibrary
-    implementation.extendsFrom minecraftLibrary
-}
+base.archivesName = "TrackAPI"
 
 java {
     withSourcesJar()
 }
 
-runs {
-    // applies to all the run configs below
-    configureEach {
-        // Recommended logging data for a userdev environment
-        // The markers can be added/remove as needed separated by commas.
-        // "SCAN": For mods scan.
-        // "REGISTRIES": For firing of registry events.
-        // "REGISTRYDUMP": For getting the contents of all registries.
-        systemProperty 'forge.logging.markers', 'REGISTRIES'
+minecraft {
+    mappings channel: "official", version: "1.21.1"
 
-        // Recommended logging level for the console
-        // You can set various levels here.
-        // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
-        systemProperty 'forge.logging.console.level', 'debug'
+    runs {
+        // applies to all the run configs below
+        configureEach {
+            workingDir.convention layout.projectDirectory.dir('run')
+            // Recommended logging data for a userdev environment
+            // The markers can be added/remove as needed separated by commas.
+            // "SCAN": For mods scan.
+            // "REGISTRIES": For firing of registry events.
+            // "REGISTRYDUMP": For getting the contents of all registries.
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
 
-        dependencies {
-            runtime project.configurations.minecraftLibrary
+            // Recommended logging level for the console
+            // You can set various levels here.
+            // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
+            systemProperty 'forge.logging.console.level', 'debug'
         }
 
-        modSource project.sourceSets.main
-    }
+        register('client') {
+            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
+            systemProperty 'forge.enabledGameTestNamespaces', 'trackapi'
+        }
 
-    client {
-        // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
-        systemProperty 'neoforge.enabledGameTestNamespaces', 'trackapi'
-    }
+        register('server') {
+            systemProperty 'forge.enabledGameTestNamespaces', 'trackapi'
+            args '--nogui'
+        }
 
-    server {
-        systemProperty 'neoforge.enabledGameTestNamespaces', 'trackapi'
-        argument '--nogui'
-    }
+        // This run config launches GameTestServer and runs all registered gametests, then exits.
+        // By default, the server will crash when no gametests are provided.
+        // The gametest system is also enabled by default for other run configs under the /test command.
+        register('gameTestServer') {
+            systemProperty 'forge.enabledGameTestNamespaces', 'trackapi'
+        }
 
-    // This run config launches GameTestServer and runs all registered gametests, then exits.
-    // By default, the server will crash when no gametests are provided.
-    // The gametest system is also enabled by default for other run configs under the /test command.
-    gameTestServer {
-        systemProperty 'neoforge.enabledGameTestNamespaces', 'trackapi'
-    }
+        register('data') {
+            // example of overriding the workingDirectory set in configureEach above, uncomment if you want to use it
+            // workingDirectory project.file('run-data')
 
-    data {
-        // example of overriding the workingDirectory set in configureEach above, uncomment if you want to use it
-        // workingDirectory project.file('run-data')
-
-        // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-        arguments.addAll '--mod', 'trackapi', '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+            // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
+            args '--mod', 'trackapi', '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+        }
     }
 }
 
-sourceSets.main.resources { srcDir 'src/generated/resources' }
+sourceSets.main.resources { srcDir layout.projectDirectory.dir('src/generated/resources') }
+
+repositories {
+    minecraft.mavenizer(it)
+    maven fg.forgeMaven
+    maven fg.minecraftLibsMaven
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = 'Sponge'
+                url = 'https://repo.spongepowered.org/repository/maven-public'
+            }
+        }
+        filter {
+            includeGroupAndSubgroups('org.spongepowered')
+        }
+    }
+    mavenCentral()
+    mavenLocal()
+}
 
 dependencies {
-    implementation 'net.neoforged:neoforge:21.1.216'
-    minecraftLibrary "org.apache.maven.wagon:wagon-ssh:3.5.3"
+    implementation minecraft.dependency("net.minecraftforge:forge:1.21.1-52.1.14")
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..
@@ -101,19 +105,15 @@ jar {
             "Specification-Version": "1", // We are version 1 of ourselves
             "Implementation-Title": project.name,
             "Implementation-Version": "${version}",
-            "Implementation-Vendor" :"trackapi",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+            "Implementation-Vendor" :"trackapi"
         ])
     }
 }
 
 publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            artifact jar
-            artifact sourcesJar
-            artifactId archivesBaseName
-        }
+    publications.register('mavenJava', MavenPublication) {
+        artifact tasks.named("jar")
+        artifact tasks.named("sourcesJar")
     }
     repositories {
         maven {

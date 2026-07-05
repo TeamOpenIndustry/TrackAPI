@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[54,)"
+loaderVersion="[58,)"
 license="MIT"
 [[mods]]
 modId="trackapi" 
@@ -10,12 +10,12 @@ description='''A common track interface'''
 [[dependencies.trackapi]]
 modId="forge"
 mandatory=true
-versionRange="[54.1.16,)"
+versionRange="[58.1.18,)"
 ordering="NONE"
 side="BOTH"
 [[dependencies.trackapi]]
 modId="minecraft"
 mandatory=true
-versionRange="[1.21.4]"
+versionRange="[1.21.8]"
 ordering="NONE"
 side="BOTH"

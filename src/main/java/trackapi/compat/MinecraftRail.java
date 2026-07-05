@@ -58,7 +58,7 @@ public class MinecraftRail implements ITrackV2 {
 		this.pos = pos;
 		BlockState state = world.getBlockState(pos);
         BaseRailBlock blockrailbase = (BaseRailBlock)state.getBlock();
-        this.direction = blockrailbase.getRailDirection(state, world, pos, new Minecart(world, pos.getX(), pos.getY(), pos.getZ()));
+        this.direction = blockrailbase.getRailDirection(state, world, pos, null/*new Minecart(world, pos.getX(), pos.getY(), pos.getZ())*/);
 	}
 
 	@Override

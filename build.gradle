@@ -16,7 +16,7 @@ if (!"release".equalsIgnoreCase(System.getProperty("target"))) {
         baseVersion += "-unknown"
     }
 }
-version = "1.21.1-forge-" + baseVersion
+version = "1.21.4-forge-" + baseVersion
 group = "trackapi" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 base.archivesName = "TrackAPI"
 
@@ -25,7 +25,7 @@ java {
 }
 
 minecraft {
-    mappings channel: "official", version: "1.21.1"
+    mappings channel: "official", version: "1.21.4"
 
     runs {
         // applies to all the run configs below
@@ -61,7 +61,7 @@ minecraft {
             systemProperty 'forge.enabledGameTestNamespaces', 'trackapi'
         }
 
-        register('data') {
+        register('clientData') {
             // example of overriding the workingDirectory set in configureEach above, uncomment if you want to use it
             // workingDirectory project.file('run-data')
 
@@ -93,7 +93,7 @@ repositories {
 }
 
 dependencies {
-    implementation minecraft.dependency("net.minecraftforge:forge:1.21.1-52.1.14")
+    implementation minecraft.dependency("net.minecraftforge:forge:1.21.4-54.1.16")
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..
